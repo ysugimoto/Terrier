@@ -31,10 +31,10 @@ class Config
 
     public static function load($name)
     {
-        if ( !file_exists(CONFIG_PATH . $name . '.php') )
+        if ( ! file_exists(CONFIG_PATH . $name . '.php') )
         {
             throw new Exception('Config load error: ' . $name . ' is not exists.');
         }
-        return require(CONFIG_PATH . $name . '.php');
+        return include(CONFIG_PATH . $name . '.php');
     }
 }

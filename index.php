@@ -1,23 +1,25 @@
 <?php
-
-define('APP_PATH',          __DIR__  . '/');
-define('CONFIG_PATH',       APP_PATH . 'Terrier/config/');
-define('COMPONENT_PATH',    APP_PATH . 'Components/');
-define('TMP_PATH',          APP_PATH . 'Twrrier/tmp/');
 define('PROCESS_INIT_TIME', time());
+
+define('BASE_PATH',     __DIR__   . '/');
+define('APP_PATH',      BASE_PATH . 'Terrier/');
+define('TEMPLATE_PATH', BASE_PATH . 'templates/');
+define('CONFIG_PATH',   APP_PATH  . 'config/');
+define('TMP_PATH',      APP_PATH  . 'tmp/');
 
 spl_autoload_register(function($className) {
     $className = str_replace('\\', '/', $className);
 
-    if ( file_exists(APP_PATH . $className . '.php') ) {
-        require_once(APP_PATH . $className . '.php');
+    if ( file_exists(BASE_PATH . $className . '.php') ) {
+        \Terrier\Log::write($className . ' class loaded', \Terrier\Log::LEVEL_INFO);
+        require_once(BASE_PATH . $className . '.php');
     }
 });
 
-Env::set('default_charset', 'UTF-8');
-
 $config = require(CONFIG_PATH . 'config.php');
 \Terrier\Config::init($config);
+
+\Terrier\Env::set('default_charset', 'UTF-8');
 
 $router   = new \Terrier\Router();
 $action   = $router->process();

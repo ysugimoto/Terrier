@@ -4,6 +4,12 @@ namespace Terrier;
 
 class Router
 {
+    const MODE_INPUT    = 'input';
+    const MODE_CONFIRM  = 'input';
+    const MODE_REDIRECT = 'redirect';
+    const MODE_SEND     = 'send';
+    const MODE_ERROR    = 'error';
+
     protected $action;
 
     public function __construct()
@@ -14,39 +20,39 @@ class Router
     public function process()
     {
         Session::init();
-        Session::oneTimeToken();
 
-        $this->action = Request::get('action', 'input');
-        switch ( $this->action )
+        $action = Request::get('action', static::MODE_INPUT);
+        switch ( $action )
         {
-            case 'input':
+            case static::MODE_INPUT:
+                return static::MODE_INPUT;
                 break;
 
-            case 'confirm':
-            case 'send':
+            case static::MODE_CONFIRM:
+            case static::MODE_SEND:
                 if ( Session::checkToken(Request::post('token')) === FALSE )
                 {
                     Session::oneTime('invalid_token', 1);
-                    $this->action = 'redirect';
+                    return static::MODE_REDIRECT;
                 }
-                if ( Validation::create(Config::load('validation'))->run() === FALSE )
+                else if ( Validation::create(Config::load('setting'))->run() === FALSE )
                 {
-                    $this->action = 'input';
+                    return static::MODE_INPUT;
                 }
 
-                if ( $this->action === 'send' )
+                if ( $action === static::MODE_SEND )
                 {
                     $mail = new \Terrier\MailSender(Config::load('mail'));
-                    $mail->send();
+                    if ( ! $mail->send() )
+                    {
+                        return static::MODE_ERROR;
+                    }
                 }
-                break;
+                return $action;
 
             default:
-                $this->action = 'input';
-                break;
+                return static::MODE_INPUT;
         }
-
-        return $this->action;
     }
 
     public function getMode()

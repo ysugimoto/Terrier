@@ -32,11 +32,12 @@ class Response
 
     public function display()
     {
-        if ( $this->mode === 'redirect' )
+        if ( $this->mode === 'redirect' ) {
             return;
         }
 
-        echo $this->view->getOutput();
+        $this->view->render();
     }
+}
 
 

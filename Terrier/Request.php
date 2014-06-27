@@ -4,12 +4,13 @@ namespace Terrier;
 
 class Request
 {
+    private static $instance;
+
     protected $_post;
     protected $_get;
     protected $_server;
     protected $_cookie;
     protected $_ip;
-    private   $instance;
 
     private static function getInstance()
     {
@@ -74,7 +75,7 @@ class Request
                 $exp = explode(',', $XFF);
                 $ip  = reset($exp);
             }
-            else if ( FALSE !== ( $HCI = $this->server('HTTP_CLIENT_IP')) && $remote && in_array($remote, $trusted) )
+            else if ( FALSE !== ( $HCI = static::server('HTTP_CLIENT_IP')) && $remote && in_array($remote, $trusted) )
             {
                 $exp = explode(',', $HCI);
                 $ip  = reset($exp);
@@ -88,10 +89,10 @@ class Request
             {
                 $ip = $default;
             }
-            $this->_ip = $ip;
+            $instance->_ip = $ip;
         }
 
-        return $this->_ip;
+        return $instance->_ip;
     }
 
     private function cleaning($_global, $encoding = 'UTF-8')
@@ -118,7 +119,7 @@ class Request
         return $filtered;
     }
 
-    private function _filterString($key, $encoding)
+    private function _filterString($str, $encoding)
     {
         if ( get_magic_quotes_gpc() )
         {
@@ -164,5 +165,6 @@ class Request
         }
 
         return $str;
+    }
 }
 

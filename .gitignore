@@ -1,0 +1,7 @@
+.DS_Store
+vendor
+composer.lock
+composer.phar
+Terrier/sample
+Terrier/tmp/log/*.log
+Terrier/tmp/upload/*

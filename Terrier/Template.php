@@ -1,0 +1,259 @@
+<?php
+
+namespace Terrier;
+
+class Template
+{
+    public static function make($templateName)
+    {
+        if ( !file_exists(TEPLATE_PATH . $templateName . '.html') )
+        {
+            Log::write('Template: ' . $templateName . ' is not found.', Log::LEVEL_WARN);
+            throw new Exception('Template: ' . $templateName . ' is not found.');
+        }
+
+        $buffer   = file_get_contents(TEMPLATE_PATH . $templateName . '.html');
+        $template = new Template($buffer, dirname(TEMPLATE_PATH . $templateName . '.html'));
+
+        return $template->compile();
+    }
+
+    protected $template;
+    protected $baseDir;
+    protected $syntax   = array('obj');
+    protected $counter  = 0;
+    protected $division = true;
+
+    public function __construct($template, $baseDir = '.')
+    {
+        $this->template = $template;
+        $this->baseDir  = $baseDir
+    }
+
+    public function compile()
+    {
+        $compile = array();
+        $index = 0;
+        $nest = 0;
+
+        preg_match_all('/\{\{([\/#@%])?(.+?)\}\}/', $this->template, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+        foreach ( $matches as $match )
+        {
+            list($all, $signature, $content) = $match;
+            $context = substr($this->template, $index, $all[1] - $index);
+            if ( $context && ! preg_match('/^[\r\n\s]+$/m', $context) )
+            {
+                if ( $nest > 0 )
+                {
+                    $context = preg_replace('/^[\n\r]+|[\n\r]+$/', '', $context);
+                }
+                $compile[] = $this->getPrefix() . $this->quote($context);
+            }
+            $index = $all[1] + strlen($all[0]);
+
+            switch ( $signature[0] )
+            {
+                case '@':
+                    $v = $this->_compileReservedVars($content[0]);
+                    if ( $v )
+                    {
+                        $compile[] = $this->getPrefix() + $v;
+                    }
+                    break;
+
+                case '%':
+                    $compile[] = $this->getPrefix() . $this->geteSyntax($content[0]);
+                    break;
+
+                case '/':
+                    if ( $content[0] === 'for' )
+                    {
+                        array_pop($this->syntax);
+                        $this->counter++;
+                    }
+                    $compile[] = ';}';
+                    $this->division = true;
+                    $nest--;
+                    break;
+
+                default:
+                    $v = $this->_compileBuiltInControl($content[0]);
+                    if ( $v )
+                    {
+                        $compile[] = $v;
+                    }
+                    if ( preg_match('/^(for|if)/', $content[0]) )
+                    {
+                        $nest++;
+                    }
+                    break;
+            } // swtich
+        } // foreach
+
+        if ( $index < strlen($this->template) )
+        {
+            $compile[] = $this->getPrefix() . $this->quote(substr($this->template, $index));
+        }
+
+        $compile[] = ';return $b;';
+
+        //var_dump(implode('', $compile));
+
+        return create_function('$obj,$b=""', implode('', $compile));
+    }
+
+    protected function _compileReservedVars($sentence)
+    {
+        $isEscape = true;
+
+        if ( $sentence{0} === '%' )
+        {
+            $sentence = substr($sentence, 1);
+            $isEscape = true;
+        }
+
+        if ( ! preg_match('/\A(data|index|parent)(.+)?/', $sentence, $match) )
+        {
+            return;
+        }
+
+        switch ( $match[1] )
+        {
+            case 'data':
+                $value = $this->getSyntax() . ((isset($match[2])) ? $match[2] : '');
+                break;
+
+            case 'parent':
+                $p     = array_slice($this->syntax, 0, -1);
+                $value = '$' . implode('->', $p) . ((isset($match[2])) ? $match[2] : '');
+                break;
+
+            case 'index':
+                $isEscape = false;
+                $value    = '$i' . ($this->counter - 1);
+                break;
+
+            default:
+                return;
+        }
+
+        return ( $isEscape ) ? "htmlspecialchars(" . $value . ",ENT_QUOTES,'UTF-8')" : $value;
+    }
+
+    protected function _compileBuiltInControl($sentence)
+    {
+        if ( ! preg_match('/^(if|else\sif|else|for|include)(?:\s(.+))?/', $sentence, $match) )
+        {
+            return $this->getPrefix() . "htmlspecialchars(" . $this->getSyntax($sentence) . ",ENT_QUOTES,'UTF-8')";
+        }
+
+        $this->division = true;
+        switch ( $match[1] )
+        {
+            case 'if':
+                return ';if(' . $this->_parseCondition($match[2]) . '){';
+
+            case 'else if':
+                return '}else if(' . $this->_parseCondition($match[2]) . '){';
+
+            case 'else':
+                return '}else{';
+
+            case 'for':
+                $c   = $this->counter;
+                $tmp = ';foreach(' . $this->getSyntax($match[2]) . ' as $i' . $c . '){';
+                $this->syntax[] = $match[2] . '[$i' . $this->counter++ . ']';
+                return $tmp;
+
+            case 'include':
+                //$path = $this->baseDir . '/' . ltrim($matches[2], '/');
+                //if ( file_exists($path) )
+                //{
+                //    $buffer = file_get_contents($path);
+                //    $tmpl   = new Template($buffer, dirname($
+
+        }
+    }
+
+    protected function quote($str)
+    {
+        $grep = array("\n", '"', "\r");
+        $sed  = array("\\n", '\\"', "\\r");
+
+        return '"' . str_replace($grep, $sed, $str) . '"';
+    }
+
+    protected function getPrefix()
+    {
+        $prefix = '.';
+
+        if ( $this->division )
+        {
+            $prefix = '$b.=';
+            $this->division = false;
+        }
+
+        return $prefix;
+    }
+
+    protected function _parseCondition($condition)
+    {
+        $token  = preg_replace('/(!|>=?|<=?|={2,3}|[^\+]\+|[^\-]\-|\*|&{2}|\|{2})/', ' $1 ', $condition);
+        $tokens = preg_split('/\s+/', $token);
+        $cond   = array();
+
+        foreach ( $tokens as $t )
+        {
+            if ( preg_match('/\A(!|>=?|<=?|={1,3}|\+|\-|\*|&{2}|\|{2})\z/', $t) )
+            {
+                $cond[] = $t;
+            }
+            else
+            {
+                $p = $this->getPrimitiveType($t);
+                if ( is_null($p) )
+                {
+                    $cond[] = $this->getSyntax($t);
+                }
+                else if ( is_int($p) || is_float($p) )
+                {
+                    $cond[] = $p;
+                }
+                else if ( is_string($p) )
+                {
+                    $cond[] = $this->quote($p);
+                }
+            }
+        }
+
+        return implode(' ', $cond);
+    }
+
+    protected function getSyntax($prop = '')
+    {
+        $syntax = '$' . implode('->', $this->syntax);
+        if ( $prop )
+        {
+            $prop = str_replace('.', '->', $prop);
+            $prop = preg_replace('/@([0-9a-zA-Z\-_]+)/', "['$1']", $prop);
+            $syntax .= '->' . $prop;
+        }
+
+        return $syntax;
+    }
+
+    protected function getPrimitiveType($value)
+    {
+        if ( preg_match('/\A[\'"](.+?)[\'"]\z/', $value, $match) )
+        {
+            return $match[1];
+        }
+        else if ( preg_match('/\A([0-9\.]+)\z/', $value, $match) )
+        {
+            return ( strpos($match[1], '.') !== FALSE ) ? floatval($match[1]) : intval($match[1]);
+        }
+
+        return null;
+    }
+}
+

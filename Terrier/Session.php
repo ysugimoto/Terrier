@@ -13,7 +13,7 @@ class Session
         session_start();
         session_regenerate_id(true);
 
-        if ( ! static::readSession() )
+        if ( ! static::readSession() ) {
             static::createSession();
         }
     }
@@ -64,7 +64,7 @@ class Session
             'sessionId'    => bin2hex(openssl_random_pseudo_bytes(16))
         );
         $auth = serialize($auth);
-        $auth = static::encode($auth);
+        $auth = Encrypt::encode($auth);
 
         $_SESSION[Config::get('session_auth_name')] = $auth;
         $_SESSION['userData']                       = array();
@@ -120,13 +120,7 @@ class Session
         $authName = Config::get('session_auth_name');
 
         return ( isset($_SESSION[$authName]) )
-                 ? @unserialize(static::decode($_SESSION[$authName]))
+                 ? @unserialize(Encrypt::decode($_SESSION[$authName]))
                  : false;
     }
 }
-
-
-
-
-
-
