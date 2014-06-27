@@ -28,4 +28,13 @@ class Config
                  ? static::$_config[$key]
                  : $default;
     }
+
+    public static function load($name)
+    {
+        if ( !file_exists(CONFIG_PATH . $name . '.php') )
+        {
+            throw new Exception('Config load error: ' . $name . ' is not exists.');
+        }
+        return require(CONFIG_PATH . $name . '.php');
+    }
 }

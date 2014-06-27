@@ -1,8 +1,10 @@
 <?php
 
-define('APP_PATH',     __DIR__ . '/');
-define('CONFIG_PATH', APP_PATH . 'config/');
-define('TMP_PATH',    APP_PATH . 'tmp/');
+define('APP_PATH',          __DIR__  . '/');
+define('CONFIG_PATH',       APP_PATH . 'Terrier/config/');
+define('COMPONENT_PATH',    APP_PATH . 'Components/');
+define('TMP_PATH',          APP_PATH . 'Twrrier/tmp/');
+define('PROCESS_INIT_TIME', time());
 
 spl_autoload_register(function($className) {
     $className = str_replace('\\', '/', $className);
@@ -12,16 +14,15 @@ spl_autoload_register(function($className) {
     }
 });
 
+Env::set('default_charset', 'UTF-8');
+
 $config = require(CONFIG_PATH . 'config.php');
 \Terrier\Config::init($config);
 
-$request = new \Terrier\Request();
-$router  = new \Terrier\Router($request);
+$router   = new \Terrier\Router();
+$action   = $router->process();
+$response = new \Terrier\Response($action);
 
-$router->process();
-
-$view = View::create($router->getMode());
-$view->attachExtraHeader();
-$view->attachExtraFooter();
-
-echo $view->getOutput();
+$response->setView(new \Terrier\View($action));
+$response->displayHeader();
+$response->display();
