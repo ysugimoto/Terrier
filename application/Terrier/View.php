@@ -20,7 +20,7 @@ class View
         $obj->error  = new Variable(Validation::getErrors());
 
         // include user helper
-        if ( files_exists(TEMPLATE_PATH . 'functions.php') )
+        if ( file_exists(TEMPLATE_PATH . 'functions.php') )
         {
             require_once(TEMPLATE_PATH . 'functions.php');
         }
