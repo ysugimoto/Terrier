@@ -26,7 +26,7 @@ class Request
     {
         $this->_post   = $this->cleaning($_POST);
         $this->_get    = $this->cleaning($_GET);
-        $this->_server = $this->cleaning($_SERVER);
+        $this->_server = $_SERVER;//$this->cleaning($_SERVER);
         $this->_cookie = $this->cleaning($_COOKIE);
     }
 
@@ -37,11 +37,25 @@ class Request
         return ( isset($instance->_get[$key]) ) ? $instance->_get[$key] : $default;
     }
 
+    public static function getAll()
+    {
+        $instance = static::getInstance();
+
+        return $instance->_get;
+    }
+
     public static function post($key, $default = null)
     {
         $instance = static::getInstance();
 
         return ( isset($instance->_post[$key]) ) ? $instance->_post[$key] : $default;
+    }
+
+    public static function postAll()
+    {
+        $instance = static::getInstance();
+
+        return $instance->_post;
     }
 
     public static function server($key, $default = null)
@@ -52,11 +66,25 @@ class Request
         return ( isset($instance->_server[$key]) ) ? $instance->_server[$key] : $default;
     }
 
+    public static function serverAll()
+    {
+        $instance = static::getInstance();
+
+        return $instance->_server;
+    }
+
     public static function cookie($key, $default = null)
     {
         $instance = static::getInstance();
 
         return ( isset($instance->_cookie[$key]) ) ? $instance->_cookie[$key] : $default;
+    }
+
+    public static function cookieAll()
+    {
+        $instance = static::getInstance();
+
+        return $instance->_cookie;
     }
 
     public static function ip()

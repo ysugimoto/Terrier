@@ -1,4 +1,5 @@
 <?php
+
 define('PROCESS_INIT_TIME', time());
 
 define('BASE_PATH',     __DIR__   . '/');
@@ -11,7 +12,6 @@ spl_autoload_register(function($className) {
     $className = str_replace('\\', '/', $className);
 
     if ( file_exists(BASE_PATH . $className . '.php') ) {
-        \Terrier\Log::write($className . ' class loaded', \Terrier\Log::LEVEL_INFO);
         require_once(BASE_PATH . $className . '.php');
     }
 });

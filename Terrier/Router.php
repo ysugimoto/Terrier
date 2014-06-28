@@ -54,11 +54,6 @@ class Router
                 return static::MODE_INPUT;
         }
     }
-
-    public function getMode()
-    {
-        return $this->action;
-    }
 }
 
 

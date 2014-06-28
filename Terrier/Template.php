@@ -6,7 +6,7 @@ class Template
 {
     public static function make($templateName)
     {
-        if ( !file_exists(TEPLATE_PATH . $templateName . '.html') )
+        if ( ! file_exists(TEMPLATE_PATH . $templateName . '.html') )
         {
             Log::write('Template: ' . $templateName . ' is not found.', Log::LEVEL_WARN);
             throw new Exception('Template: ' . $templateName . ' is not found.');
@@ -15,7 +15,9 @@ class Template
         $buffer   = file_get_contents(TEMPLATE_PATH . $templateName . '.html');
         $template = new Template($buffer, dirname(TEMPLATE_PATH . $templateName . '.html'));
 
-        return $template->compile();
+        $template->compile();
+
+        return $template;
     }
 
     protected $template;
@@ -23,11 +25,22 @@ class Template
     protected $syntax   = array('obj');
     protected $counter  = 0;
     protected $division = true;
+    protected $templateFunction;
 
     public function __construct($template, $baseDir = '.')
     {
         $this->template = $template;
-        $this->baseDir  = $baseDir
+        $this->baseDir  = $baseDir;
+    }
+
+    public function parse()
+    {
+        if ( ! is_callable($this->templateFunction, TRUE) )
+        {
+            throw new Exception('Template::parse: template is not compiled yet');
+        }
+
+        return call_user_func_array($this->templateFunction, func_get_args());
     }
 
     public function compile()
@@ -97,9 +110,7 @@ class Template
 
         $compile[] = ';return $b;';
 
-        //var_dump(implode('', $compile));
-
-        return create_function('$obj,$b=""', implode('', $compile));
+        $this->templateFunction = create_function('$obj,$b=""', implode('', $compile));
     }
 
     protected function _compileReservedVars($sentence)
@@ -137,14 +148,14 @@ class Template
                 return;
         }
 
-        return ( $isEscape ) ? "htmlspecialchars(" . $value . ",ENT_QUOTES,'UTF-8')" : $value;
+        return ( $isEscape ) ? "\\Terrier\\Helper::escape(" . $value . ")" : $value;
     }
 
     protected function _compileBuiltInControl($sentence)
     {
         if ( ! preg_match('/^(if|else\sif|else|for|include)(?:\s(.+))?/', $sentence, $match) )
         {
-            return $this->getPrefix() . "htmlspecialchars(" . $this->getSyntax($sentence) . ",ENT_QUOTES,'UTF-8')";
+            return $this->getPrefix() . "\\Terrier\\Helper::escape(" . $this->getSyntax($sentence) . ")";
         }
 
         $this->division = true;

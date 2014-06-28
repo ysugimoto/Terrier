@@ -8,19 +8,24 @@ class View
 
     public function __construct($action)
     {
-        $this->template = Template::compile($action);
+        $this->template = Template::make($action);
     }
 
     public function render() {
-        $arguments = array(
-            Validation::values(),
-            Validation::errors(),
-            Request::postAll(),
-            Request::getAll(),
-            Request::serverAll()
-        );
+        $obj         = new \stdClass();
+        $obj->post   = new Variable(Request::postAll());
+        $obj->get    = new Variable(Request::getAll());
+        $obj->server = new Variable(Request::serverAll());
+        $obj->value  = new Variable(Validation::getValues());
+        $obj->error  = new Variable(Validation::getErrors());
 
-        return call_user_func_array(array($this, 'template'), $arguments);
+        // include user helper
+        if ( files_exists(TEMPLATE_PATH . 'functions.php') )
+        {
+            require_once(TEMPLATE_PATH . 'functions.php');
+        }
+
+        echo $this->template->parse(new Variable($obj), '');
     }
 }
 
