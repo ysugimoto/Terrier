@@ -1,4 +1,19 @@
 <!doctype html>
-{{if server.argv}}
-    <p class="aaa">{{server.argv@0}}</p>
-{{/if}}
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Terrier mailform</title>
+        <link rel="stylesheet" type="text/css" href="asset/style.css">
+    </head>
+    <body>
+        <form action="{{confirmUrl}}" method="post">
+        <div class="component">
+            <input type="text" name="name" value="{{value.name}}">
+        </div>
+        <div class="component">
+            <input type="submit" value="send">
+        </div>
+        </form>
+    </body>
+</html>
+

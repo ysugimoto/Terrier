@@ -36,7 +36,7 @@ class Response
             return;
         }
 
-        $this->view->render();
+        echo $this->view->render();
     }
 }
 

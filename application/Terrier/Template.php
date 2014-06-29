@@ -43,7 +43,7 @@ class Template
         return call_user_func_array($this->templateFunction, func_get_args());
     }
 
-    public function compile()
+    public function compile($partial = FALSE)
     {
         $compile = array();
         $index = 0;
@@ -106,6 +106,11 @@ class Template
         if ( $index < strlen($this->template) )
         {
             $compile[] = $this->getPrefix() . $this->quote(substr($this->template, $index));
+        }
+
+        if ( $partial === TRUE )
+        {
+            return implode('', $compile);
         }
 
         $compile[] = ';return $b;';
@@ -177,18 +182,20 @@ class Template
                 return $tmp;
 
             case 'include':
-                //$path = $this->baseDir . '/' . ltrim($matches[2], '/');
-                //if ( file_exists($path) )
-                //{
-                //    $buffer = file_get_contents($path);
-                //    $tmpl   = new Template($buffer, dirname($
-
+                $path = $this->baseDir . '/' . ltrim($matches[2], '/');
+                if ( file_exists($path) )
+                {
+                    $buffer = file_get_contents($path);
+                    $tmpl   = new Template($buffer, dirname($path));
+                    return $tmpl->compile(TRUE);
+                }
+                return '';
         }
     }
 
     protected function quote($str)
     {
-        $grep = array("\n", '"', "\r");
+        $grep = array("\n",  '"',   "\r");
         $sed  = array("\\n", '\\"', "\\r");
 
         return '"' . str_replace($grep, $sed, $str) . '"';
