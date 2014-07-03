@@ -98,12 +98,12 @@ class Request
             $trusted = Config::get('trusted_proxys', array());
             $ip = $default = '0.0.0.0';
 
-            if ( FALSE !== ( $XFF = static::server('X_FORWARDED_FOR')) && $remote && in_array($remote, $trusted) )
+            if ( ($XFF = static::server('X_FORWARDED_FOR')) && $remote && in_array($remote, $trusted) )
             {
                 $exp = explode(',', $XFF);
                 $ip  = reset($exp);
             }
-            else if ( FALSE !== ( $HCI = static::server('HTTP_CLIENT_IP')) && $remote && in_array($remote, $trusted) )
+            else if ( ($HCI = static::server('HTTP_CLIENT_IP')) && $remote && in_array($remote, $trusted) )
             {
                 $exp = explode(',', $HCI);
                 $ip  = reset($exp);

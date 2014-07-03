@@ -18,7 +18,7 @@ class Log
         {
             $write = '[' . $date->format('Y-m-d H:i:s') . ' INFO] ';
         }
-        else if ( $level <= self::LEVEL_WARN && COnfig::get('logging_level') > 1 )
+        else if ( $level <= self::LEVEL_WARN && Config::get('logging_level') > 1 )
         {
             $write = '[' . $date->format('Y-m-d H:i:s') . ' WARN] ';
         }
@@ -27,7 +27,7 @@ class Log
         {
             if ( ! static::$fp )
             {
-                static::$fp = fopen(TMP_PATH . 'log/' . $date->format('Y-m-d') . '.log', 'ab');
+                static::$fp = @fopen(TMP_PATH . 'log/' . $date->format('Y-m-d') . '.log', 'ab');
             }
             flock(static::$fp, LOCK_EX);
             fwrite(static::$fp, $write . $message . "\n");
@@ -40,6 +40,8 @@ class Log
         if ( is_resource(static::$fp) )
         {
             fclose(static::$fp);
+            // force gc
+            static::$fp = null;
         }
     }
 
