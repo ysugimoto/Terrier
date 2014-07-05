@@ -6,9 +6,13 @@
         <link rel="stylesheet" type="text/css" href="asset/style.css">
     </head>
     <body>
+        {{for error}}
+        {{@value}}
+        {{/for}}
         <form action="{{confirmUrl}}" method="post">
         <div class="component">
             <input type="text" name="name" value="{{value.name}}">
+            {{error.name}}
         </div>
         <div class="component">
             <input type="submit" value="send">

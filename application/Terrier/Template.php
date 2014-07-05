@@ -54,7 +54,7 @@ class Template
         {
             list($all, $signature, $content) = $match;
             $context = substr($this->template, $index, $all[1] - $index);
-            if ( $context && ! preg_match('/^[\r\n\s]+$/m', $context) )
+            if ( $context && ! preg_match('/\A[\r\n\s]+\z/', $context) )
             {
                 if ( $nest > 0 )
                 {
@@ -70,7 +70,7 @@ class Template
                     $v = $this->_compileReservedVars($content[0]);
                     if ( $v )
                     {
-                        $compile[] = $this->getPrefix() + $v;
+                        $compile[] = $this->getPrefix() . $v;
                     }
                     break;
 
@@ -114,6 +114,9 @@ class Template
         }
 
         $compile[] = ';return $b;';
+        //echo '<pre>';
+        //var_dump(implode('', $compile));
+        //echo '</pre>';
 
         $this->templateFunction = create_function('$obj,$b=""', implode('', $compile));
     }
@@ -125,10 +128,10 @@ class Template
         if ( $sentence{0} === '%' )
         {
             $sentence = substr($sentence, 1);
-            $isEscape = true;
+            $isEscape = false;
         }
 
-        if ( ! preg_match('/\A(data|index|parent)(.+)?/', $sentence, $match) )
+        if ( ! preg_match('/\A(data|value|index|parent)(.+)?/', $sentence, $match) )
         {
             return;
         }
@@ -136,7 +139,9 @@ class Template
         switch ( $match[1] )
         {
             case 'data':
-                $value = $this->getSyntax() . ((isset($match[2])) ? $match[2] : '');
+            case 'value':
+                //$value = $this->getSyntax() . ((isset($match[2])) ? $match[2] : '');
+                $value    = '$v' . ($this->counter - 1);
                 break;
 
             case 'parent':
@@ -145,7 +150,6 @@ class Template
                 break;
 
             case 'index':
-                $isEscape = false;
                 $value    = '$i' . ($this->counter - 1);
                 break;
 
@@ -176,9 +180,11 @@ class Template
                 return '}else{';
 
             case 'for':
-                $c   = $this->counter;
-                $tmp = ';foreach(' . $this->getSyntax($match[2]) . ' as $i' . $c . '){';
-                $this->syntax[] = $match[2] . '[$i' . $this->counter++ . ']';
+                $c   = $this->counter++;
+                $ic  = '$i' . $c;
+                $vc  = '$v' . $c;
+                $tmp = ';foreach(' . $this->getSyntax($match[2]) . '->get() as ' . $ic . '=>' . $vc .'){' . $vc . '=new \\Terrier\\Variable(' . $vc .');';
+                $this->syntax[] = $match[2] . '[$i' . $this->counter . ']';
                 return $tmp;
 
             case 'include':
@@ -266,7 +272,7 @@ class Template
         {
             return $match[1];
         }
-        else if ( preg_match('/\A([0-9\.]+)\z/', $value, $match) )
+        else if ( preg_match('/\A([0-9\.])\z/', $value, $match) )
         {
             return ( strpos($match[1], '.') !== FALSE ) ? floatval($match[1]) : intval($match[1]);
         }

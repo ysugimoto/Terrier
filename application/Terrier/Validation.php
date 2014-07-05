@@ -24,16 +24,16 @@ class Validation
 
     public function __construct($setting)
     {
-        $this->setting = $setting;
+        $this->setting  = $setting;
+        $this->messages = Config::load('messages');
     }
 
     public function run($values)
     {
         $isValid = TRUE;
 
-        foreach ( $this->setting as $setting )
+        foreach ( $this->setting as $field => $setting )
         {
-            $field = $setting['field'];
             $value = ( isset($values[$field]) ) ? $values[$field] : '';
 
             foreach ( $setting['rules'] as $key => $rule )
@@ -68,9 +68,10 @@ class Validation
                 {
                     array_unshift($arguments, $value);
                     $result = call_user_func_array(array($this, $validation), $arguments);
-                    if ( is_bool($result) )
+                    if ( is_bool($result) && $result === false )
                     {
-                        static::$errors[$field] = TRUE;
+                        $arguments[0] = $setting['label'];
+                        static::$errors[$field] = vsprintf($this->messages[$validation], $arguments);
                         $isValid = FALSE;
                     }
                     else if ( is_string($result) )
@@ -87,7 +88,7 @@ class Validation
         return $isValid;
     }
 
-    protected function parseRules($rules)
+    protected function parseRules($rule)
     {
         if ( FALSE !== ($point = strpos($rule, '@')) )
         {

@@ -7,6 +7,9 @@ class Session
 
     protected static $request;
 
+    const ONETIME_KEEP_SIGNATURE  = 'Onetime:keep';
+    const ONETIME_SWEEP_SIGNATURE = 'Onetime:sweep';
+
     public static function init()
     {
         session_name(Config::get('session_name'));
@@ -25,15 +28,22 @@ class Session
 
     public static function oneTime($key, $value)
     {
-        $_SESSION['userData']['Onetime:sweep:' . $key] = $value;
+        $_SESSION['userData'][static::ONETIME_KEEP_SIGNATURE. $key] = $value;
     }
 
     public static function oneTimeToken()
     {
         $token = sha1(bin2hex(openssl_random_pseudo_bytes(32)));
-        $_SESSION['userData']['Onetime:sweep:token'] = $token;
+        static::oneTime(Config::get('session_onetime_token_name', 'token'), $token);
 
         return $token;
+    }
+
+    public static function checkToken($token = null)
+    {
+        $tokenName = Config::get('session_onetime_token_name', 'token');
+
+        return ( $token && $token === static::get($tokenName) ) ? true : false;
     }
 
     public static function set($key, $value)
@@ -47,9 +57,13 @@ class Session
         {
             return $_SESSION['userData'][$key];
         }
-        else if ( isset($_SESSION['userData']['Onetime:sweep:' . $key]) )
+        else if ( isset($_SESSION['userData'][static::ONETIME_KEEP_SIGNATURE . $key]) )
         {
-            return $_SESSION['userData']['Onetime:sweep:' . $key];
+            return $_SESSION['userData'][static::ONETIME_KEEP_SIGNATURE . $key];
+        }
+        else if ( isset($_SESSION['userData'][static::ONETIME_SWEEP_SIGNATURE . $key]) )
+        {
+            return $_SESSION['userData'][static::ONETIME_SWEEP_SIGNATURE . $key];
         }
 
         return $default;
@@ -78,8 +92,9 @@ class Session
         }
 
         // check session is expired
-        if ( $auth['lastActivity'] + Config::get('session_lifetime') < PROCESS_INIT_TIME )
+        if ( $auth['lastActivity'] + Config::get('session_lifetime', 300000) < PROCESS_INIT_TIME )
         {
+            Log::write('Session destroyed: expired', Log::LEVEL_INFO);
             return static::destroySession();
         }
 
@@ -87,6 +102,7 @@ class Session
         if ( Config::get('session_match_useragent') === true
              && strpos(Request::server('HTTP_USER_AGENT'), $auth['userAgent']) !== 0 )
         {
+            Log::write('Session destroyed: userAgent changed', Log::LEVEL_INFO);
             return static::destroySession();
         }
 
@@ -110,7 +126,7 @@ class Session
         $_SESSION['userData'] = $newSession;
 
         $auth['lastActivity'] = PROCESS_INIT_TIME;
-        $_SESSION[Config::get('auth_auth_name')] = static::encode(serialize($auth));
+        $_SESSION[Config::get('session_auth_name')] = Encrypt::encode(serialize($auth));
 
         return true;
     }
@@ -122,5 +138,10 @@ class Session
         return ( isset($_SESSION[$authName]) )
                  ? @unserialize(Encrypt::decode($_SESSION[$authName]))
                  : false;
+    }
+
+    protected static function destroySession()
+    {
+        $_SESSION = array();
     }
 }

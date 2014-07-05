@@ -30,9 +30,10 @@ class View
         $buffer = $this->template->parse(new Variable($obj), '');
 
         // set onetime token
+        $token = Session::oneTimeToken();
         $buffer = str_replace(
             '</form>',
-            '<input type="hidden" name="token" value="' . Session::oneTimeToken() . '"></form>',
+            '<input type="hidden" name="token" value="' . $token . '"></form>',
             $buffer
         );
 

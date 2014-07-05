@@ -17,9 +17,20 @@ class Response
         $this->view = $view;
     }
 
+    public function isRedirect()
+    {
+        return $this->mode === Router::MODE_REDIRECT;
+    }
+
+    public function redirect()
+    {
+        header('Location: ' . Config::get('base_url', '/') . 'index.php');
+        return;
+    }
+
     public function displayHeader()
     {
-        if ( $this->mode === 'redirect' )
+        if ( $this->mode === Router::MODE_REDIRECT )
         {
             header('Location: ' . Config::get('base_url') . 'index.php');
             return;
@@ -32,7 +43,8 @@ class Response
 
     public function display()
     {
-        if ( $this->mode === 'redirect' ) {
+        if ( $this->mode === Router::MODE_REDIRECT )
+        {
             return;
         }
 

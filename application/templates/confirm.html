@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Terrier mailform</title>
+        <link rel="stylesheet" type="text/css" href="asset/style.css">
+    </head>
+    <body>
+        <form action="{{confirmUrl}}" method="post">
+        <h3>以下の内容でよろしければ送信ボタンを押してください。
+        <div class="component">
+            お名前：{{value.name}}
+        </div>
+        <div class="component">
+            <input type="submit" value="send">
+        </div>
+        </form>
+    </body>
+</html>
+

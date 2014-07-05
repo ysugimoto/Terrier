@@ -5,7 +5,7 @@ namespace Terrier;
 class Router
 {
     const MODE_INPUT    = 'input';
-    const MODE_CONFIRM  = 'input';
+    const MODE_CONFIRM  = 'confirm';
     const MODE_REDIRECT = 'redirect';
     const MODE_SEND     = 'send';
     const MODE_ERROR    = 'error';
@@ -35,7 +35,7 @@ class Router
                     Session::oneTime('invalid_token', 1);
                     return static::MODE_REDIRECT;
                 }
-                else if ( Validation::create(Config::load('setting'))->run() === FALSE )
+                else if ( Validation::create(Config::load('setting'))->run(Request::postAll()) === FALSE )
                 {
                     return static::MODE_INPUT;
                 }

@@ -8,6 +8,13 @@ $router   = new \Terrier\Router();
 $action   = $router->process();
 $response = new \Terrier\Response($action);
 
-$response->setView(new \Terrier\View($action));
-$response->displayHeader();
-$response->display();
+if ( $response->isRedirect() )
+{
+    $response->redirect();
+}
+else
+{
+    $response->setView(new \Terrier\View($action));
+    $response->displayHeader();
+    $response->display();
+}
