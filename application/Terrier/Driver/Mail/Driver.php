@@ -79,8 +79,8 @@ abstract class Driver
     public function setup($settings)
     {
         $this->setting   = $settings;
-        $this->_from     = $this->_removeLine((string)$setting['from']);
-        $this->_fromName = $this->_removeLine((string)$setting['from_name']);
+        $this->_from     = $this->_removeLine((string)$this->setting->from);
+        $this->_fromName = $this->_removeLine((string)$this->setting->from_name);
 
     }
 

@@ -38,6 +38,18 @@ class Validation
 
             foreach ( $setting['rules'] as $key => $rule )
             {
+                if ( isset($rule['upload']) && $rule['upload'] === true )
+                {
+                    $upload = new Upload(Config::load('upload'));
+                    $result = $upload->process($field);
+                    if ( $result === false )
+                    {
+                        $isValid = false;
+                        static::$errors[$field] = true;
+                    }
+                    continue;
+                }
+
                 list($validation, $arguments) = $this->parseRules($rule);
 
                 if ( ! method_exists($this, $validation) )
@@ -52,16 +64,23 @@ class Validation
                     {
                         array_unshift($arguments, $val);
                         $result = call_user_func_array(array($this, $validation), $arguments);
-                        if ( is_bool($result) )
+                        if ( is_bool($result) && $result === false )
                         {
-                            static::$errors[$field] = TRUE;
+                            $arguments[0] = $setting['label'];
+                            static::$errors[$field] = vsprintf($this->messages[$validation], $arguments);
                             $isValid = FALSE;
+                            break;
                         }
                         else if ( is_string($result) )
                         {
                             $val = $value[$index] = $result;
                         }
                         array_shift($arguments);
+                    }
+
+                    if ( $isValid === false )
+                    {
+                        break;
                     }
                 }
                 else
@@ -73,6 +92,7 @@ class Validation
                         $arguments[0] = $setting['label'];
                         static::$errors[$field] = vsprintf($this->messages[$validation], $arguments);
                         $isValid = FALSE;
+                        break;
                     }
                     else if ( is_string($result) )
                     {

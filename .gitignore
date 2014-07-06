@@ -2,6 +2,6 @@
 vendor
 composer.lock
 composer.phar
-Terrier/sample
-Terrier/tmp/log/*.log
-Terrier/tmp/upload/*
+application/config
+application/tmp/log/*.log
+application/tmp/upload/*

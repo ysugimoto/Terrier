@@ -66,6 +66,10 @@ class Template
 
             switch ( $signature[0] )
             {
+                case '#':
+                    $compile[] = $this->getPrefix() . $this->_compileHelper($content[0]);
+                    break;
+
                 case '@':
                     $v = $this->_compileReservedVars($content[0]);
                     if ( $v )
@@ -251,6 +255,47 @@ class Template
         }
 
         return implode(' ', $cond);
+    }
+
+    protected function _compileHelper($sentence)
+    {
+        $args = preg_split('/\s+/', $sentence);
+        for ( $i = 0; $i < count($args); ++$i ) {
+            if ( preg_match('/\\\\$/', $args[$i]) ) {
+                $args[$i] = rtrim($args[$i], '\\');
+                if ( isset($args[$i + 1]) )
+                {
+                    $args[$i] .= ' ' . $args[$i + 1];
+                    array_splice($args, $i + 1);
+                }
+            }
+        }
+        $function = array_shift($args);
+
+        if ( ! function_exists($function) )
+        {
+            throw new Exception('Parse Error: "' . $function . '" is undefined or not a function.');
+        }
+
+        foreach ( $args as $index => $arg )
+        {
+            $p = $this->getPrimitiveType($arg);
+            if ( $p === null )
+            {
+                $args[$index] = $this->getSyntax($arg);
+            }
+            else if ( is_string($arg) )
+            {
+                $args[$index] = $this->quote($p);
+            }
+            else if ( is_int($p) || is_float($p) )
+            {
+                $args[$index] = $p;
+            }
+        }
+
+        return $function . '(' . implode(',', $args) . ')';
+
     }
 
     protected function getSyntax($prop = '')

@@ -21,3 +21,9 @@ $config = require(CONFIG_PATH . 'config.php');
 
 define('TEMPLATE_PATH', BASE_PATH . trim(\Terrier\Config::get('template_path', 'templates'), '/') . '/');
 define('TMP_PATH',      BASE_PATH . trim(\Terrier\Config::get('tmp_path', 'tmp'), '/') . '/');
+
+// include user helper
+if ( file_exists(TEMPLATE_PATH . 'functions.php') )
+{
+    require_once(TEMPLATE_PATH . 'functions.php');
+}

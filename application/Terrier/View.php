@@ -21,12 +21,6 @@ class View
         $obj->confirmUrl = 'index.php?action=confirm';
         $obj->sendUrl    = 'index.php?action=send';
 
-        // include user helper
-        if ( file_exists(TEMPLATE_PATH . 'functions.php') )
-        {
-            require_once(TEMPLATE_PATH . 'functions.php');
-        }
-
         $buffer = $this->template->parse(new Variable($obj), '');
 
         // set onetime token

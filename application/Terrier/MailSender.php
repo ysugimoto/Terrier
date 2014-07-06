@@ -15,12 +15,12 @@ class MailSender
         {
             case 'smtp':
                 $this->driver = new \Terrier\Driver\Mail\SmtpMail();
-                $this->driver->setup($setting);
+                $this->driver->setup($this->setting);
                 break;
 
             case 'php':
                 $this->driver = new \Terrier\Driver\Mail\PhpMail();
-                $this->driver->setup($setting);
+                $this->driver->setup($this->setting);
                 break;
         }
 

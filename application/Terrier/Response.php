@@ -19,12 +19,14 @@ class Response
 
     public function isRedirect()
     {
-        return $this->mode === Router::MODE_REDIRECT;
+        return ( $this->mode === Router::MODE_REDIRECT
+                 || $this->mode === Router::MODE_COMPLETE
+                 || $this->mode === Router::MODE_ERROR ) ? true : false;
     }
 
     public function redirect()
     {
-        header('Location: ' . Config::get('base_url', '/') . 'index.php');
+        header('Location: ' . Request::buildURL($this->mode));
         return;
     }
 

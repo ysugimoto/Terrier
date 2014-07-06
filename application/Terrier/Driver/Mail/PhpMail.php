@@ -2,7 +2,9 @@
 
 namespace Terrier\Driver\Mail;
 
-use Terrier;
+use Terrier\Request as Request;
+use Terrier\Env as Env;
+use Terrier\Log as Log;
 
 class PhpMail extends Driver
 {
@@ -11,12 +13,6 @@ class PhpMail extends Driver
      * @var array
      */
     protected $_errorSend = array();
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
 
     // ---------------------------------------------------------------
 
@@ -39,7 +35,7 @@ class PhpMail extends Driver
             $to = $this->_addressFormat($to);
             if ( ! Env::get('safe_mode') )
             {
-                $ret = @mail(
+                $ret = mail(
                             $to,
                             $this->_encodeHeader($this->_subject),
                             $body,
@@ -51,7 +47,7 @@ class PhpMail extends Driver
             {
                 // If PHP works with safe-mode,
                 // mail() function can't use 5th parameter ( additional parameter )
-                $ret = @mail(
+                $ret = mail(
                             $to,
                             $this->_encodeHeader($this->_subject),
                             $body,
@@ -60,7 +56,7 @@ class PhpMail extends Driver
             }
             if ( ! $ret )
             {
-                // send erro...
+                // send error...
                 $this->_errorSend[] = $this->_addressFormat($to);
                 Log::write("Mail send miss to: {$to} address.", Log::LEVEL_INFO);
             }

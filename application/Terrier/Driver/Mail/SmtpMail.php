@@ -48,15 +48,13 @@ class SmtpMail extends Driver
      */
     protected function initParams()
     {
-        $smtp = $this->setting['smtp'];
-
         // set SMTP server settings from config
-        $this->_host      = $smtp['hostname'];
-        $this->_port      = $smtp['port'];
-        $this->_crypto    = $smtp['crypto'];
-        $this->_username  = $smtp['username'];
-        $this->_password  = $smtp['password'];
-        $this->_keepAlive = $smtp['keepalive'];
+        $this->_host      = $this->setting->hostname;
+        $this->_port      = $this->setting->port;
+        $this->_crypto    = $this->setting->crypto;
+        $this->_username  = $this->setting->username;
+        $this->_password  = $this->setting->password;
+        $this->_keepAlive = $this->setting->keepalive;
     }
 
 
