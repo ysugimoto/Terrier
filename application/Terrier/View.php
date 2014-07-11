@@ -18,8 +18,8 @@ class View
         $obj->server     = new Variable(Request::serverAll());
         $obj->value      = new Variable(Validation::getValues());
         $obj->error      = new Variable(Validation::getErrors());
-        $obj->confirmUrl = 'index.php?action=confirm';
-        $obj->sendUrl    = 'index.php?action=send';
+        $obj->confirmUrl = Request::buildURL('confirm');
+        $obj->sendUrl    = Request::buildURL('send');
 
         $buffer = $this->template->parse(new Variable($obj), '');
 

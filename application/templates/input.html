@@ -1,24 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
     <head>
-        <meta charset="UTF-8">
-        <title>Terrier mailform</title>
-        <link rel="stylesheet" type="text/css" href="asset/style.css">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Terrier mailform sample</title>
+        <link href="asset/fonts/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="asset/css/bootstrap-3.1.1.min.css" rel="stylesheet">
+        <link href="asset/css/lollies.min.css" rel="stylesheet">
+        <link href="asset/css/custom.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="asset/js/html5shiv-3.7.0.js"></script>
+            <script src="asset/js/respond-1.4.2.js"></script>
+        <![endif]-->
     </head>
     <body>
-            {{#input_hidden_all}}
-        {{for error}}
-        {{@value}}
-        {{/for}}
-        <form action="{{confirmUrl}}" method="post">
-        <div class="component">
-            <input type="text" name="name" value="{{value.name}}">
-            {{error.name}}
+        <header id="main-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 headerMatch">
+                    <!-- LOGO -->
+                    <div id="logo"><a href="/"><img src="http://placehold.it/720x200/149cd7/149cd7" /></a></div>
+                </div>
+                <div class="col-md-6 headerMatch">
+                    <!-- MASTHEAD -->
+                    <div id="masthead-container">
+                        <div id="masthead">
+                            <!-- CALL TO ACTION -->
+                            <div class="call"><h1>Lorem ipsum 1800123123</h1><p>Consectetur adipiscing elit</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="component">
-            <input type="submit" value="send">
+        </header>
+        <div class="form-block">
+            <div class="container">
+                {{if error}}
+                <div class="alert alert-danger">
+                    {{for error}}
+                    <p>{{@data}}</p>
+                    {{/for}}
+                </div>
+                {{/if}}
+                <div class="row">
+                    <form method="post" id="custom_form" name="custom_form" action="{{confirmUrl}}">
+                       <div class="form-group">
+                           <label >お名前</label>
+                           <input  type="text" id="name" name="name" class="form-control" value="{{value.name}}">
+                       </div>
+                       <div class="form-group">
+                           <label >メールアドレス</label>
+                           <input type="text" id="email" name="email" class="form-control" value="{{value.email}}">
+                       </div>
+                       <div class="form-group">
+                           <label><input type="checkbox" name="gender" value="1"{{if value.gender == 1}} checled{{/if}}>男性</label>
+                           <label><input type="checkbox" name="gender" value="2"{{if value.gender == 2}} checked{{/if}}>女性</label>
+                       </div>
+                       <div class="form-group">
+                           <label >郵便番号</label>
+                           <input type="text" name="zipcode1" class="form-control" value="{{value.zipcode1}}">-
+                           <input type="text" name="zipcode2" class="form-control" value="{{value.zipcode2}}">
+                       </div>
+                       <div class="form-group">
+                           <label>都道府県</label>
+                           <select name="pref" class="form-control">
+                               <option value=""{{if !value.pref}} selected{{/if}}>選択してください</option>
+                               <option value="1"{{if value.pref == 1}} selected{{/if}}>北海道</option>
+                               <option value="2"{{if value.pref == 2}} selected{{/if}}>青森県</option>
+                               <option value="3"{{if value.pref == 3}} selected{{/if}}>岩手県</option>
+                               <option value="4"{{if value.pref == 4}} selected{{/if}}>宮城県</option>
+                               <option value="5"{{if value.pref == 5}} selected{{/if}}>秋田県</option>
+                               <option value="6"{{if value.pref == 6}} selected{{/if}}>山形県</option>
+                               <option value="7"{{if value.pref == 7}} selected{{/if}}>福島県</option>
+                               <option value="8"{{if value.pref == 8}} selected{{/if}}>茨城県</option>
+                               <option value="9"{{if value.pref == 9}} selected{{/if}}>栃木県</option>
+                               <option value="10"{{if value.pref == 10}} selected{{/if}}>群馬県</option>
+                               <option value="11"{{if value.pref == 11}} selected{{/if}}>埼玉県</option>
+                               <option value="12"{{if value.pref == 12}} selected{{/if}}>千葉県</option>
+                               <option value="13"{{if value.pref == 13}} selected{{/if}}>東京都</option>
+                               <option value="14"{{if value.pref == 14}} selected{{/if}}>神奈川県</option>
+                               <option value="15"{{if value.pref == 15}} selected{{/if}}>新潟県</option>
+                               <option value="16"{{if value.pref == 16}} selected{{/if}}>富山県</option>
+                               <option value="17"{{if value.pref == 17}} selected{{/if}}>石川県</option>
+                               <option value="18"{{if value.pref == 18}} selected{{/if}}>福井県</option>
+                               <option value="19"{{if value.pref == 19}} selected{{/if}}>山梨県</option>
+                               <option value="20"{{if value.pref == 20}} selected{{/if}}>長野県</option>
+                               <option value="21"{{if value.pref == 21}} selected{{/if}}>岐阜県</option>
+                               <option value="22"{{if value.pref == 22}} selected{{/if}}>静岡県</option>
+                               <option value="23"{{if value.pref == 23}} selected{{/if}}>愛知県</option>
+                               <option value="24"{{if value.pref == 24}} selected{{/if}}>三重県</option>
+                               <option value="25"{{if value.pref == 25}} selected{{/if}}>滋賀県</option>
+                               <option value="26"{{if value.pref == 26}} selected{{/if}}>京都府</option>
+                               <option value="27"{{if value.pref == 27}} selected{{/if}}>大阪府</option>
+                               <option value="28"{{if value.pref == 28}} selected{{/if}}>兵庫県</option>
+                               <option value="29"{{if value.pref == 29}} selected{{/if}}>奈良県</option>
+                               <option value="30"{{if value.pref == 30}} selected{{/if}}>和歌山県</option>
+                               <option value="31"{{if value.pref == 31}} selected{{/if}}>鳥取県</option>
+                               <option value="32"{{if value.pref == 32}} selected{{/if}}>島根県</option>
+                               <option value="33"{{if value.pref == 33}} selected{{/if}}>岡山県</option>
+                               <option value="34"{{if value.pref == 34}} selected{{/if}}>広島県</option>
+                               <option value="35"{{if value.pref == 35}} selected{{/if}}>山口県</option>
+                               <option value="36"{{if value.pref == 36}} selected{{/if}}>徳島県</option>
+                               <option value="37"{{if value.pref == 37}} selected{{/if}}>香川県</option>
+                               <option value="38"{{if value.pref == 38}} selected{{/if}}>愛媛県</option>
+                               <option value="39"{{if value.pref == 39}} selected{{/if}}>高知県</option>
+                               <option value="40"{{if value.pref == 40}} selected{{/if}}>福岡県</option>
+                               <option value="41"{{if value.pref == 41}} selected{{/if}}>佐賀県</option>
+                               <option value="42"{{if value.pref == 42}} selected{{/if}}>長崎県</option>
+                               <option value="43"{{if value.pref == 43}} selected{{/if}}>熊本県</option>
+                               <option value="44"{{if value.pref == 44}} selected{{/if}}>大分県</option>
+                               <option value="45"{{if value.pref == 45}} selected{{/if}}>宮崎県</option>
+                               <option value="46"{{if value.pref == 46}} selected{{/if}}>鹿児島県</option>
+                               <option value="47"{{if value.pref == 47}} selected{{/if}}>沖縄県</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label >住所</label>
+                           <input type="text" name="address" class="form-control" value="{{value.address}}">
+                       </div>
+                       <div class="form-group">
+                           <label >内容</label>
+                           <textarea type="text" id="message" name="message" class="form-control">{{value.message}}</textarea>
+                       </div>
+                       <button type="submit" class="btn btn-default" id="submit">Submit</button>
+                   </form>
+                </div>
+            </div>
         </div>
-        </form>
+        <div class="copyright-block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12 left">
+                        &copy; 2014 Terrier mail form.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SCRIPTS -->
+        <script src="asset/js/jquery-1.7.2.min.js"></script>
+        <script src="asset/js/bootstrap-3.1.1.min.js"></script>
+        <script src="asset/plugins/match-height/match-height-0.5.1.min.js"></script>
+        <script src="asset/js/lollies.min.js"></script>
     </body>
 </html>
-
+                    

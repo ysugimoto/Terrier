@@ -230,9 +230,14 @@ class Template
         $tokens = preg_split('/\s+/', $token);
         $cond   = array();
 
+
         foreach ( $tokens as $t )
         {
-            if ( preg_match('/\A(!|>=?|<=?|={1,3}|\+|\-|\*|&{2}|\|{2})\z/', $t) )
+            if ( $t === '' )
+            {
+                continue;
+            }
+            else if ( preg_match('/\A(!|>=?|<=?|={1,3}|\+|\-|\*|&{2}|\|{2})\z/', $t) )
             {
                 $cond[] = $t;
             }
@@ -313,11 +318,11 @@ class Template
 
     protected function getPrimitiveType($value)
     {
-        if ( preg_match('/\A[\'"](.+?)[\'"]\z/', $value, $match) )
+        if ( preg_match('/\A[\'"](.*?)[\'"]\z/', $value, $match) )
         {
             return $match[1];
         }
-        else if ( preg_match('/\A([0-9\.])\z/', $value, $match) )
+        else if ( preg_match('/\A([0-9\.]+?)\z/', $value, $match) )
         {
             return ( strpos($match[1], '.') !== FALSE ) ? floatval($match[1]) : intval($match[1]);
         }
