@@ -246,7 +246,16 @@ class Template
                 $p = $this->getPrimitiveType($t);
                 if ( is_null($p) )
                 {
-                    $cond[] = $this->getSyntax($t);
+                    $syntax = $this->getSyntax($t);
+                    if ( preg_match('/\?\z/', $syntax) )
+                    {
+                        $syntax = rtrim($syntax, '?');
+                        $cond[] = 'isset(' . $syntax . ') && !empty(' . $syntax . ')';
+                    }
+                    else
+                    {
+                        $cond[] = $syntax;
+                    }
                 }
                 else if ( is_int($p) || is_float($p) )
                 {

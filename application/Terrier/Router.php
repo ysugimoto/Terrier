@@ -11,11 +11,16 @@ class Router
     const MODE_ERROR    = 'error';
     const MODE_COMPLETE = 'complete';
 
-    protected $action;
+    protected static $action;
 
     public function __construct()
     {
         // Do we need something?
+    }
+
+    public static function action()
+    {
+        return ( static::$action ) ? static::$action : static::MODE_INPUT;
     }
 
     public function process()
@@ -25,6 +30,14 @@ class Router
         $action = Request::get('action', static::MODE_INPUT);
         switch ( $action )
         {
+            case static::MODE_INPUT:
+                if ( Request::server('REQUEST_METHOD') === 'POST' )
+                {
+                    Validation::create(Config::load('setting'))->run(Request::postAll());
+                    Validation::flushError();
+                }
+                break;
+
             case static::MODE_CONFIRM:
             case static::MODE_SEND:
                 if ( Session::checkToken(Request::post('token')) === FALSE )
@@ -40,15 +53,19 @@ class Router
                 if ( $action === static::MODE_SEND )
                 {
                     $mail = new \Terrier\MailSender(Config::load('mail'));
-                    if ( $mail->send(Config::get('admin_email')) )
+                    $setting = Config::load('mail');
+                    if ( ! empty($setting['admin_email']) )
                     {
-                        Session::oneTime('send_success', 1);
-                        $action = static::MODE_COMPLETE;
-                    }
-                    else
-                    {
-                        Session::oneTime('send_error', 1);
-                        $action = static::MODE_ERROR;
+                        if ( $mail->send($setting['admin_email']) )
+                        {
+                            Session::oneTime('send_success', 1);
+                            $action = static::MODE_COMPLETE;
+                        }
+                        else
+                        {
+                            Session::oneTime('send_error', 1);
+                            $action = static::MODE_ERROR;
+                        }
                     }
                 }
                 break;
@@ -72,6 +89,8 @@ class Router
                 $action = static::MODE_INPUT;
                 break;
         }
+
+        static::$action = $action;
 
         return $action;
     }

@@ -6,12 +6,28 @@ class Variable implements \Iterator
 {
     protected $_getterVariable;
     protected $_variable;
+    protected $_isPrimitive = false;
     protected $_pointer = 0;
 
     public function __construct($var)
     {
-        $this->_variable       = $var;
-        $this->_getterVariable = ( is_object($var) ) ? get_object_vars($var) : $var;
+        $this->_variable = $var;
+
+        if ( is_object($var) )
+        {
+            $this->_getterVariable = get_object_vars($var);
+        }
+        else if ( is_array($var) )
+        {
+            $this->_getterVariable = $var;
+        }
+        else
+        {
+            $this->_isPrimitive = true;
+            $this->_getterVariable = array(
+                "$$var" => $var
+            );
+        }
     }
 
     public function __get($key)
@@ -21,6 +37,17 @@ class Variable implements \Iterator
                  : null;
     }
 
+    public function __isset($key)
+    {
+        if ( array_key_exists($key, $this->_getterVariable)
+            && count($this->_getterVariable[$key]->get()) > 0 )
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     public function get()
     {
         return $this->_getterVariable;
@@ -28,7 +55,9 @@ class Variable implements \Iterator
 
     public function __toString()
     {
-        return $this->_variable;
+        return ( $this->_isPrimitive )
+                 ? $this->_variable
+                 : gettype($this->_variable);
     }
 
     public function rewind()

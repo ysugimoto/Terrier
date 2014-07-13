@@ -17,6 +17,11 @@ class Validation
         return static::$errors;
     }
 
+    public static function flushError()
+    {
+        static::$errors = array();
+    }
+
     public static function getValues()
     {
         return static::$values;
@@ -30,7 +35,7 @@ class Validation
 
     public function run($values)
     {
-        $isValid = TRUE;
+        $isValid  = true;
 
         foreach ( $this->setting as $field => $setting )
         {
@@ -44,7 +49,7 @@ class Validation
                     $result = $upload->process($field);
                     if ( $result === false )
                     {
-                        $isValid = false;
+                        $sValid = false;
                         static::$errors[$field] = true;
                     }
                     continue;
@@ -63,6 +68,7 @@ class Validation
                     foreach ( $value as $index => $val )
                     {
                         array_unshift($arguments, $val);
+                        $this->_check($validation, $arugments);
                         $result = call_user_func_array(array($this, $validation), $arguments);
                         if ( is_bool($result) && $result === false )
                         {
@@ -125,6 +131,8 @@ class Validation
         return array($validation, $arguments);
     }
 
+    // --------------------------------------------------
+
     /**
      * Value is required
      * 
@@ -135,6 +143,24 @@ class Validation
     public function required($str)
     {
         return ( $str !== '' ) ? TRUE : FALSE;
+    }
+
+
+    // --------------------------------------------------
+
+    /**
+     * Value is expected string
+     * 
+     * @access public
+     * @param  string $str
+     * poaram  [string, ...]
+     * @return bool
+     */
+    public function expected($str)
+    {
+        $expects = array_slice(func_get_args(), 1);
+
+        return ( in_array($str, $expects) ) ? TRUE : FALSE;
     }
 
 
@@ -265,7 +291,7 @@ class Validation
             $len = strlen($str);
         }
 
-        return ( $len <= (int)$length ) ? TRUE : FALSE; 
+        return ( $len <= (int)$length ) ? TRUE : FALSE;
     }
 
 
@@ -291,7 +317,33 @@ class Validation
             $len = strlen($str);
         }
 
-        return ( $len >= (int)$length ) ? TRUE : FALSE; 
+        return ( $len >= (int)$length ) ? TRUE : FALSE;
+    }
+
+
+    // --------------------------------------------------
+
+
+    /**
+     * Value is exact length
+     * 
+     * @access public
+     * @param  string $str
+     * @param  string $length
+     * @return bool
+     */
+    public function exact_length($str, $length)
+    {
+        if ( function_exists('mb_strlen') )
+        {
+            $len = mb_strlen($str, 'UTF-8');
+        }
+        else
+        {
+            $len = strlen($str);
+        }
+
+        return ( $len === (int)$length ) ? TRUE : FALSE;
     }
 
 
