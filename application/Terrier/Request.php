@@ -32,12 +32,12 @@ class Request
 
     public static function buildURL($action)
     {
-        $format = '%s://%s%s%s';
+        $format = '%s://%s%s';
         $port   = ( static::server('SERVER_PORT')  ) ? (int)static::server('SERVER_PORT') : 80;
         $bind   = array(
             ( static::server('HTTPS') === 'on' || $port === 443 ) ? 'https' : 'http',
             static::server('HTTP_HOST'),
-            ( $port === 80 || $port === 443 ) ? '' : ':' . static::server('SERVER_PORT'),
+            //( $port === 80 || $port === 443 ) ? '' : ':' . static::server('SERVER_PORT'),
             dirname(static::server('REQUEST_URI')) . '/index.php?action=' . $action
         );
 

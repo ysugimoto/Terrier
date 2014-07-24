@@ -14,6 +14,11 @@ spl_autoload_register(function($className) {
     }
 });
 
+if ( ! file_exists(CONFIG_PATH . 'config.php') )
+{
+    exit('Configuration file not found.');
+}
+
 $config = require(CONFIG_PATH . 'config.php');
 \Terrier\Config::init($config);
 

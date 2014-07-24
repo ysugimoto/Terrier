@@ -33,8 +33,12 @@ class Validation
         $this->messages = Config::load('messages');
     }
 
+    protected $currentValues = array();
+
     public function run($values)
     {
+        // stack
+        $this->currentValues = $values;
         $isValid  = true;
 
         foreach ( $this->setting as $field => $setting )
@@ -110,6 +114,9 @@ class Validation
             static::$values[$field] = $value;
 
         } // setting foreach
+
+        // purge
+        $this->currentValue = array();
 
         return $isValid;
     }
@@ -498,6 +505,25 @@ class Validation
 
 
     /**
+     * Value is expected
+     * 
+     * @access public
+     * @param  string $str
+     * @pram   string cond
+     * @return bool
+     */
+    public function expects($str, $cond)
+    {
+        $expected = array_filter(explode(':', $cond));
+
+        return in_array($str, $expected);
+    }
+
+
+    // --------------------------------------------------
+
+
+    /**
      * Value is unsigned numeric chars only
      * 
      * @access public
@@ -589,10 +615,10 @@ class Validation
     public function conv_num($str)
     {
         return str_repalce(
-                         array('０', '１', '２', '３', '４', '５', '６', '７', '８', '９'),
-                         array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'),
-                         $str
-                         );
+            array('０', '１', '２', '３', '４', '５', '６', '７', '８', '９'),
+            array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'),
+            $str
+        );
     }
 
 
@@ -646,7 +672,18 @@ class Validation
      */
     public function past_date($str)
     {
-        return ( strtotime($str) < time() ) ? TRUE : FALSE;
+        $validated = false;
+        try
+        {
+            $date = new DateTime($str);
+            $validated = ( $date->getTimestamp() < time() ) ? TRUE : FALSE;
+        }
+        catch (Exception $e)
+        {
+            $validated = false;
+        }
+
+        return $validated;
     }
 
 
@@ -662,7 +699,18 @@ class Validation
      */
     public function future_date($str)
     {
-        return ( strtotime($str) >= time() ) ? TRUE : FALSE;
+        $validated = false;
+        try
+        {
+            $date = new DateTime($str);
+            $validated = ( $date->getTimestamp() >= time() ) ? TRUE : FALSE;
+        }
+        catch (Exception $e)
+        {
+            $validated = false;
+        }
+
+        return $validated;
     }
 
 
@@ -701,6 +749,10 @@ class Validation
      */
     public function matches($str, $cond)
     {
-        return ( $str === $cond ) ? TRUE : FALSE;
+        $matchValue = ( isset($this->currentValues[$cond]) )
+                        ? $this->currentValues[$cond]
+                        : null;
+
+        return ( $str === $matchValue ) ? TRUE : FALSE;
     }
 }
