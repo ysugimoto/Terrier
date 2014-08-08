@@ -199,6 +199,12 @@ class Validation
      */
     public function valid_email($str)
     {
+        if ( Config::get('disable_email_filter') === true )
+        {
+            // check mail address when filter email for japanese.
+            return preg_match('/\A.+@[0-9a-zA-Z\.]+\Z', $str);
+        }
+
         if ( function_exists('filter_var') )
         {
             if ( ! filter_var($str, FILTER_VALIDATE_EMAIL) )
