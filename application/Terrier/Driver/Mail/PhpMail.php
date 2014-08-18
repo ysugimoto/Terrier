@@ -43,7 +43,7 @@ class PhpMail extends Driver
                             sprintf('-oi -f %s', $this->_from)
                         );
             }
-            else 
+            else
             {
                 // If PHP works with safe-mode,
                 // mail() function can't use 5th parameter ( additional parameter )
@@ -58,7 +58,7 @@ class PhpMail extends Driver
             {
                 // send error...
                 $this->_errorSend[] = $this->_addressFormat($to);
-                Log::write("Mail send miss to: {$to} address.", Log::LEVEL_INFO);
+                throw new \Terrier\Exception("Mail send miss to: {$to} address.");
             }
             else
             {
@@ -66,7 +66,7 @@ class PhpMail extends Driver
             }
         }
 
-        return ( count($this->_errorSend) > 0 ) ? TRUE : FALSE;
+        return true;
     }
 
 

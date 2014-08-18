@@ -2,8 +2,25 @@
 
 namespace Terrier;
 
+/**
+ *
+ * Terrier Mailform application
+ * View Template parser
+ *
+ * @namespace Terrier
+ * @class Template
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ */
 class Template
 {
+    /**
+     * Create template instance
+     *
+     * @method make
+     * @public static
+     * @param string $templateName
+     * @return \Terrier\Template
+     */
     public static function make($templateName)
     {
         if ( ! file_exists(TEMPLATE_PATH . $templateName . '.html') )
@@ -20,19 +37,90 @@ class Template
         return $template;
     }
 
+    /**
+     * Stack template string
+     *
+     * @property $template
+     * @protected
+     * @type string
+     */
     protected $template;
+
+    /**
+     * Compiling template base directory
+     *
+     * @property $baseDir
+     * @protected
+     * @type string
+     */
     protected $baseDir;
-    protected $syntax   = array('obj');
-    protected $counter  = 0;
+
+    /**
+     * Compiling template variable syntax
+     *
+     * @property $syntax
+     * @protected
+     * @type array
+     */
+    protected $syntax = array('obj');
+
+    /**
+     * Compiling template loop counter
+     *
+     * @property $counter
+     * @protected
+     * @type int
+     */
+    protected $counter = 0;
+
+    /**
+     * Compiling division flag
+     *
+     * @property $division
+     * @protected
+     * @type bool
+     */
     protected $division = true;
+
+    /**
+     * Compiled template function
+     *
+     * @property $templateFunction
+     * @protected
+     * @type Function
+     */
     protected $templateFunction;
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Constructor
+     *
+     * @constructor
+     * @public
+     * @param string $template
+     * @param string $baseDir
+     */
     public function __construct($template, $baseDir = '.')
     {
         $this->template = $template;
         $this->baseDir  = $baseDir;
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Parse template with parameters
+     *
+     * @method parse
+     * @public
+     * @param ...mixed
+     * @return string
+     */
     public function parse()
     {
         if ( ! is_callable($this->templateFunction, TRUE) )
@@ -43,11 +131,22 @@ class Template
         return call_user_func_array($this->templateFunction, func_get_args());
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Compile template
+     *
+     * @method compile
+     * @public
+     * @param bool $partial
+     */
     public function compile($partial = FALSE)
     {
         $compile = array();
-        $index = 0;
-        $nest = 0;
+        $index   = 0;
+        $nest    = 0;
 
         preg_match_all('/\{\{([\/#@%])?(.+?)\}\}/', $this->template, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
         foreach ( $matches as $match )
@@ -118,6 +217,8 @@ class Template
         }
 
         $compile[] = ';return $b;';
+
+        // debug
         //echo '<pre>';
         //var_dump(implode('', $compile));
         //echo '</pre>';
@@ -125,6 +226,18 @@ class Template
         $this->templateFunction = create_function('$obj,$b=""', implode('', $compile));
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Compile Reserved variable signatures
+     *
+     * @method _compileReservedVars
+     * @protected
+     * @param string $sentence
+     * @return string
+     */
     protected function _compileReservedVars($sentence)
     {
         $isEscape = true;
@@ -145,7 +258,7 @@ class Template
             case 'data':
             case 'value':
                 //$value = $this->getSyntax() . ((isset($match[2])) ? $match[2] : '');
-                $value    = '$v' . ($this->counter - 1);
+                $value = '$v' . ($this->counter - 1);
                 break;
 
             case 'parent':
@@ -154,7 +267,7 @@ class Template
                 break;
 
             case 'index':
-                $value    = '$i' . ($this->counter - 1);
+                $value = '$i' . ($this->counter - 1);
                 break;
 
             default:
@@ -164,6 +277,18 @@ class Template
         return ( $isEscape ) ? "\\Terrier\\Helper::escape(" . $value . ")" : $value;
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Compile Built-in control signatures
+     *
+     * @method _compileBuiltInControl
+     * @protected
+     * @param string $sentence
+     * @return string
+     */
     protected function _compileBuiltInControl($sentence)
     {
         if ( ! preg_match('/^(if|else\sif|else|for|include)(?:\s(.+))?/', $sentence, $match) )
@@ -203,6 +328,18 @@ class Template
         }
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Quote string
+     *
+     * @method quote
+     * @protected
+     * @param string $str
+     * @return string
+     */
     protected function quote($str)
     {
         $grep = array("\n",  '"',   "\r");
@@ -211,6 +348,17 @@ class Template
         return '"' . str_replace($grep, $sed, $str) . '"';
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Get current concat prefix
+     *
+     * @method getPrefix
+     * @protected
+     * @return string
+     */
     protected function getPrefix()
     {
         $prefix = '.';
@@ -224,6 +372,18 @@ class Template
         return $prefix;
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Parse condition sentence
+     *
+     * @method _parseCondition
+     * @protected
+     * @param string $condition
+     * @return string
+     */
     protected function _parseCondition($condition)
     {
         $token  = preg_replace('/(!|>=?|<=?|={2,3}|[^\+]\+|[^\-]\-|\*|&{2}|\|{2})/', ' $1 ', $condition);
@@ -271,6 +431,18 @@ class Template
         return implode(' ', $cond);
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Compile Helper call sentence
+     *
+     * @method _compileHelper
+     * @protected
+     * @param string $sentence
+     * @return string
+     */
     protected function _compileHelper($sentence)
     {
         $args = preg_split('/\s+/', $sentence);
@@ -288,7 +460,12 @@ class Template
 
         if ( ! function_exists($function) )
         {
-            throw new Exception('Parse Error: "' . $function . '" is undefined or not a function.');
+            $nFunction = '\Terrier\\' . $function;
+            if ( ! function_exists($nFunction) ) {
+                throw new Exception('Parse Error: "' . $function . '" is undefined or not a function.');
+            }
+
+            $function = $nFunction;
         }
 
         foreach ( $args as $index => $arg )
@@ -309,9 +486,20 @@ class Template
         }
 
         return $function . '(' . implode(',', $args) . ')';
-
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Get Variable access syntax
+     *
+     * @method getSytax
+     * @protected
+     * @param string $prop
+     * @return string
+     */
     protected function getSyntax($prop = '')
     {
         $syntax = '$' . implode('->', $this->syntax);
@@ -325,6 +513,18 @@ class Template
         return $syntax;
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Detect parsed variable is Primitive
+     *
+     * @method getPrimitiveType
+     * @protected
+     * @param string $value
+     * @return mixed
+     */
     protected function getPrimitiveType($value)
     {
         if ( preg_match('/\A[\'"](.*?)[\'"]\z/', $value, $match) )
@@ -339,4 +539,3 @@ class Template
         return null;
     }
 }
-

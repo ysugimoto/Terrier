@@ -2,7 +2,9 @@
 
 namespace Terrier\Driver\Mail;
 
-use Terrier;
+use Terrier\Request as Request;
+use Terrier\Env as Env;
+use Terrier\Log as Log;
 
 class SmtpMail extends Driver
 {
@@ -157,6 +159,10 @@ class SmtpMail extends Driver
     {
         $this->initParams();
         $this->handle = @fsockopen($this->_host, $this->_port);
+        if ( ! is_resource($this->handle) )
+        {
+            throw new \Terrier\Exception('SMTP host connection refused');
+        }
         $this->cmd('EHLO ' . $this->_host);
 
         // Does Server need Authenticate?

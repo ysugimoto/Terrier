@@ -2,45 +2,54 @@
 
 namespace Terrier;
 
+/**
+ *
+ * Terrier Mailform application
+ * Application File uploader
+ *
+ * @namespace Terrier
+ * @class Upload
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ */
 class Upload
 {
     /**
      * Stack error message
-     * @var string
+     * @type string
      */
     protected $_error;
 
     /**
      * Double extension list ( ex tar.gz, tar.bz2 and more... )
-     * @var array
+     * @type array
      */
     protected $_doubleDotExtensions = array('gz' => 'tar', 'bz2' => 'tar');
 
 
     /**
      * Image extension for Web
-     * @var array
+     * @type array
      */
     protected $_imageExtension  = array('gif', 'jpg', 'jpeg', 'png');
 
 
     /**
      * Safety add suffix extensions list
-     * @var array
+     * @type array
      */
     protected $_suffixExtension = array('js', 'php', 'exe', 'rb', 'py', 'pl');
 
 
     /**
      * Current process settings
-     * @var array
+     * @type array
      */
     protected $_settings = array();
 
 
     /**
      * Upload default settings
-     * @var array
+     * @type array
      */
     protected $_defaultSettings = array(
         'upload_dir'         => '',
@@ -57,6 +66,12 @@ class Upload
         // 'max_height'   => int -- validate image height ( image file only )
     );
 
+    /**
+     * Constructor
+     *
+     * @constructor
+     * @param array $conf
+     */
     public function __construct($conf = array())
     {
         $this->_settings = new Variable(array_merge($this->_defaultSettings, $conf));
@@ -65,10 +80,12 @@ class Upload
 
     // ---------------------------------------------------------------
 
+
     /**
      * Get error message
-     * 
-     * @access public
+     *
+     * @method processError
+     * @public
      * @return string
      */
     public function processError()
@@ -82,8 +99,9 @@ class Upload
 
     /**
      * Execute upload from settings
-     * 
-     * @access public
+     *
+     * @method process
+     * @public
      * @param  mixed  $handle
      * @param  string $destDir
      * @return mixed ( object or bool )
@@ -131,8 +149,9 @@ class Upload
 
     /**
      * Main upload process
-     * 
-     * @access protected
+     *
+     * @method _uploadProcess
+     * @protected
      * @param  string $field
      * @param  string $destDir
      * @return mixed
@@ -204,12 +223,15 @@ class Upload
         return $dat;
     }
 
+
     // ---------------------------------------------------------------
+
 
     /**
      * Validate upload file
-     * 
-     * @access protected
+     *
+     * @method _validateFile
+     * @protected
      * @param  array $FILE
      * @return mixed
      */
@@ -250,7 +272,7 @@ class Upload
         }
 
         // Is uploaded file is allowed extension?
-        if ( ! $this->_check_allowed_extension($extension) )
+        if ( ! $this->_checkAllowedExtension($extension) )
         {
             return $this->_setError('Uploaded file can not allowed extension.');
         }
@@ -324,8 +346,9 @@ class Upload
 
     /**
      * escape filename
-     * 
-     * @access protected
+     *
+     * @method _prepFilename
+     * @protected
      * @param  string $filename
      * @return string
      */
@@ -342,12 +365,13 @@ class Upload
 
     /**
      * Check uploaded file's extension is allowed
-     * 
-     * @access protected
+     *
+     * @method _checkAllowedExtension
+     * @protected
      * @param  string $ext
      * @return bool
      */
-    protected function _check_allowed_extension($ext)
+    protected function _checkAllowedExtension($ext)
     {
         $allowed = ( $this->_settings->image_only === TRUE )
                      ? $this->_imageExtension
@@ -356,13 +380,15 @@ class Upload
         return in_array($ext, $allowed);
     }
 
+
     // ---------------------------------------------------------------
 
 
     /**
      * Set error string and always return FALSE
-     * 
-     * @access protected
+     *
+     * @method _setError
+     * @protected
      * @param  string $msg
      * @return FALSE
      */
@@ -378,8 +404,9 @@ class Upload
 
     /**
      * Get error string
-     * 
-     * @access public
+     *
+     * @method getError
+     * @public
      * @return string
      */
     protected function getError()

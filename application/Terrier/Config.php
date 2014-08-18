@@ -5,7 +5,7 @@ namespace Terrier;
 /**
  *
  * Terrier Mailform application
- * Aplication config manager
+ * Application Config manager
  *
  * @namespace Terrier
  * @class Config
@@ -38,7 +38,7 @@ class Config
      *
      * @method init
      * @public static
-     * @param {array} $config
+     * @param array $config
      * @throws \Terier\Exception
      */
     public static function init($config = array())
@@ -53,28 +53,36 @@ class Config
         static::$initialized = true;
     }
 
+
+    // ----------------------------------------
+
+
     /**
      * Set config
      *
      * @method set
      * @public static
-     * @param {string} $key
-     * @param {mixed} $value
-     * @return {void}
+     * @param string $key
+     * @param mixed $value
+     * @return void
      */
     public static function set($key, $value)
     {
         static::$_config[$key] = $value;
     }
 
+
+    // ----------------------------------------
+
+
     /**
      * Get config
      *
      * @method get
      * @public static
-     * @param {string} $key
-     * @param {mixed} $default
-     * @return {mixed}
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
      */
     public static function get($key, $default = null)
     {
@@ -83,13 +91,17 @@ class Config
                  : $default;
     }
 
+
+    // ----------------------------------------
+
+
     /**
      * Load configuration
      *
      * @method load
      * @public static
-     * @param {string} $name
-     * @return {array}
+     * @param string $name
+     * @return array
      * @throws \Terrier\Exception
      */
     public static function load($name)

@@ -1,5 +1,12 @@
 <?php if ( ! defined('BASE_PATH') ) exit;
 
+/**
+ * Terrier Validation message settings
+ *
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ * @copyright Yoshiaki Sugimoto
+ */
+
 return array(
     'alnum'         => '%sは半角英数で入力してください。',
     'alunm_dash'    => '%sは半角英数で入力してください。',

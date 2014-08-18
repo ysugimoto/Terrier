@@ -2,12 +2,22 @@
 
 namespace Terrier;
 
+/**
+ *
+ * Terrier Mailform application
+ * String Encryption class
+ *
+ * @namespace Terrier
+ * @class Encrypt
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ */
 class Encrypt
 {
     /**
      * Encode xor
-     * 
-     * @access public
+     *
+     * @method encode
+     * @public static
      * @param  string $string
      * @return string
      */
@@ -34,8 +44,9 @@ class Encrypt
 
     /**
      * Decode xor
-     * 
-     * @access public
+     *
+     * @decode
+     * @public static
      * @param  string $string
      * @return string
      */
@@ -59,8 +70,9 @@ class Encrypt
 
     /**
      * XOR merge
-     * 
-     * @access protected
+     *
+     * @method _merge
+     * @protected static
      * @param  string $string
      * @return string
      */

@@ -2,48 +2,192 @@
 
 namespace Terrier;
 
+/**
+ *
+ * Terrier Mailform application
+ * Input value validator
+ *
+ * @namespace Terrier
+ * @class Validation
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ */
 class Validation
 {
+    /**
+     * Validation errors
+     *
+     * @property $errors
+     * @protected static
+     * @type array
+     */
     protected static $errors = array();
+
+    /**
+     * Validation values
+     *
+     * @property $values
+     * @protected static
+     * @type array
+     */
     protected static $values = array();
 
+    /**
+     * Marked reply fields
+     *
+     * @property $replyFields
+     * @protected static
+     * @type array
+     */
+    protected static $replyFields = array();
+
+    /**
+     * Current validation values
+     *
+     * @property $currentValues
+     * @protected
+     * @type array
+     */
+    protected $currentValues = array();
+
+
+    // ----------------------------------------
+
+
+    /**
+     * Create validation instance
+     *
+     * @method create
+     * @public static
+     * @return \Terrier\Validation
+     */
     public static function create($setting)
     {
         return new static($setting);
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Get validation errors
+     *
+     * @method getErorrs
+     * @public static
+     * @return array
+     */
     public static function getErrors()
     {
         return static::$errors;
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Flush validation errors
+     *
+     * @method flushErorrs
+     * @public static
+     * @return array
+     */
     public static function flushError()
     {
         static::$errors = array();
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Get replay fields
+     *
+     * @method getReplyFields
+     * @public static
+     * @return array
+     */
+    public static function getReplyFields()
+    {
+        return static::$replyFields;
+    }
+
+
+    // ----------------------------------------
+
+
+    /**
+     * Get validation values
+     *
+     * @method getValues
+     * @public static
+     * @return array
+     */
     public static function getValues()
     {
         return static::$values;
     }
 
+
+    // ----------------------------------------
+
+
+    /**
+     * Get validation value
+     *
+     * @method getValue
+     * @public static
+     * @param string $field
+     * @return mixed
+     */
+    public static function getValue($field)
+    {
+        return ( isset(static::$values[$field]) ) ? static::$values[$field] : null;
+    }
+
+
+    // ----------------------------------------
+
+
+    /**
+     * Constructor
+     *
+     * @constructor
+     * @param array $setting
+     */
     public function __construct($setting)
     {
         $this->setting  = $setting;
         $this->messages = Config::load('messages');
     }
 
-    protected $currentValues = array();
 
+    // ----------------------------------------
+
+
+    /**
+     * Run validate
+     *
+     * @method run
+     * @public
+     * @param array $values
+     * @return bool
+     */
     public function run($values)
     {
         // stack
         $this->currentValues = $values;
-        $isValid  = true;
+        $isValid             = true;
 
         foreach ( $this->setting as $field => $setting )
         {
             $value = ( isset($values[$field]) ) ? $values[$field] : '';
+
+            if ( isset($setting['reply']) && $setting['reply'] === true )
+            {
+                static::$replyFields[] = $field;
+            }
 
             foreach ( $setting['rules'] as $key => $rule )
             {
@@ -121,6 +265,18 @@ class Validation
         return $isValid;
     }
 
+
+    // --------------------------------------------------
+
+
+    /**
+     * Parse validation rules
+     *
+     * @method parseRues
+     * @protected
+     * @param  string $rule
+     * @return string
+     */
     protected function parseRules($rule)
     {
         if ( FALSE !== ($point = strpos($rule, '@')) )
@@ -138,12 +294,15 @@ class Validation
         return array($validation, $arguments);
     }
 
+
     // --------------------------------------------------
+
 
     /**
      * Value is required
-     * 
-     * @access public
+     *
+     * @method required
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -155,10 +314,12 @@ class Validation
 
     // --------------------------------------------------
 
+
     /**
      * Value is expected string
-     * 
-     * @access public
+     *
+     * @method expected
+     * @public
      * @param  string $str
      * poaram  [string, ...]
      * @return bool
@@ -176,8 +337,9 @@ class Validation
 
     /**
      * Value is blank only
-     * 
-     * @access public
+     *
+     * @method blank
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -192,8 +354,9 @@ class Validation
 
     /**
      * Value is valid email format and dns exists
-     * 
-     * @access public
+     *
+     * @method valid_email
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -234,8 +397,9 @@ class Validation
 
     /**
      * Value is valid URI format
-     * 
-     * @access public
+     *
+     * @method valid_url
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -255,8 +419,9 @@ class Validation
 
     /**
      * Value is strcit integer format ( 0-9 digits )
-     * 
-     * @access public
+     *
+     * @method valid_url
+     * @pubic
      * @param  string $str
      * @return bool
      */
@@ -271,8 +436,9 @@ class Validation
 
     /**
      * return trimmed value
-     * 
-     * @access public
+     *
+     * @method trim
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -287,8 +453,9 @@ class Validation
 
     /**
      * Value length less than condition length
-     * 
-     * @access public
+     *
+     * @method max_length
+     * @public
      * @param  string $str
      * @param  string $length
      * @return bool
@@ -313,8 +480,9 @@ class Validation
 
     /**
      * Value length greater than condition length
-     * 
-     * @access public
+     *
+     * @method min_length
+     * @public
      * @param  string $str
      * @param  string $length
      * @return bool
@@ -339,8 +507,9 @@ class Validation
 
     /**
      * Value is exact length
-     * 
-     * @access public
+     *
+     * @method exact_length
+     * @public
      * @param  string $str
      * @param  string $length
      * @return bool
@@ -365,8 +534,9 @@ class Validation
 
     /**
      * Value is match in regex
-     * 
-     * @access public
+     *
+     * @method regex
+     * @public
      * @param  string $str
      * @param  string $regex
      * @return bool
@@ -382,8 +552,9 @@ class Validation
 
     /**
      * Value in range digit
-     * 
-     * @access public
+     *
+     * @method range
+     * @public
      * @param  string $str
      * @param  string $range
      * @return bool
@@ -400,8 +571,9 @@ class Validation
 
     /**
      * Value is Alpha chars only
-     * 
-     * @access public
+     *
+     * @method alpha
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -416,8 +588,9 @@ class Validation
 
     /**
      * Value is Alpha-numeric chars only
-     * 
-     * @access public
+     *
+     * @method alnum
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -432,8 +605,9 @@ class Validation
 
     /**
      * Value is Alpha-numeric and dash chars only
-     * 
-     * @access public
+     *
+     * @method alnum_dash
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -448,8 +622,9 @@ class Validation
 
     /**
      * Value is Alpha and dash chars only
-     * 
-     * @access public
+     *
+     * @method alpha_dash
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -464,8 +639,9 @@ class Validation
 
     /**
      * Value is Lowercase-Alpha chars only
-     * 
-     * @access public
+     *
+     * @method alpha_lower
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -480,8 +656,9 @@ class Validation
 
     /**
      * Value is Upercase-Alpha chars only
-     * 
-     * @access public
+     *
+     * @method alpha_upper
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -496,8 +673,9 @@ class Validation
 
     /**
      * Value is numeric chars only
-     * 
-     * @access public
+     *
+     * @method numeric
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -512,8 +690,9 @@ class Validation
 
     /**
      * Value is expected
-     * 
-     * @access public
+     *
+     * @method expects
+     * @public
      * @param  string $str
      * @pram   string cond
      * @return bool
@@ -531,8 +710,9 @@ class Validation
 
     /**
      * Value is unsigned numeric chars only
-     * 
-     * @access public
+     *
+     * @method unsigned
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -547,8 +727,9 @@ class Validation
 
     /**
      * Value is telnumber format only
-     * 
-     * @access public
+     *
+     * @method telnumber
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -563,8 +744,9 @@ class Validation
 
     /**
      * Value is "kana" chars only
-     * 
-     * @access public
+     *
+     * @method kana
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -580,8 +762,9 @@ class Validation
 
     /**
      * Value is "hiragana" chars only
-     * 
-     * @access public
+     *
+     * @method hiragana
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -597,8 +780,9 @@ class Validation
 
     /**
      * convert kana
-     * 
-     * @access public
+     *
+     * @method conv_kana
+     * @public
      * @param  string $str
      * @return string
      */
@@ -613,8 +797,9 @@ class Validation
 
     /**
      * convert number
-     * 
-     * @access public
+     *
+     * @method conv_num
+     * @public
      * @param  string $str
      * @return string
      */
@@ -633,8 +818,9 @@ class Validation
 
     /**
      * Value is Zipcode-format only
-     * 
-     * @access public
+     *
+     * @method zipcode
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -649,8 +835,9 @@ class Validation
 
     /**
      * Value is Date-format only
-     * 
-     * @access public
+     *
+     * @method dateformat
+     * @public
      * @param  string $str
      * @param  string $cond
      * @return bool
@@ -671,8 +858,9 @@ class Validation
 
     /**
      * Value is past-date only
-     * 
-     * @access public
+     *
+     * @method past_date
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -698,8 +886,9 @@ class Validation
 
     /**
      * Value is future date only
-     * 
-     * @access public
+     *
+     * @method future_date
+     * @public
      * @param  string $str
      * @return bool
      */
@@ -725,8 +914,9 @@ class Validation
 
     /**
      * Value is exact date only
-     * 
-     * @access public
+     *
+     * @method exact_date
+     * @public
      * @param  string $str
      * @param  string $cond
      * @return bool
@@ -747,8 +937,9 @@ class Validation
 
     /**
      * Value is matched other field value
-     * 
-     * @access public
+     *
+     * @method matches
+     * @public
      * @param  string $str
      * @param  string $cond
      * @return bool

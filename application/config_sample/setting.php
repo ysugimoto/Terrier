@@ -1,5 +1,23 @@
 <?php if ( ! defined('BASE_PATH') ) exit;
 
+/**
+ * Terrier Validation fields settings sample
+ *
+ * @example
+ * <code>
+ *  // key is fieldname
+ *  $setting['name'] = array(
+ *      // label is field display name
+ *      'label' => 'お名前',
+ *      // rules is array, validation rules
+ *      'rules' => array(
+ *          'required', // this field is required
+ *          'max_length@10' // input value must be less than 10 length (seprataror is @)
+ *      )
+ *  );
+ *  </code>
+ */
+
 $setting['name'] = array(
     'label'  => 'お名前',
     'rules'  => array(

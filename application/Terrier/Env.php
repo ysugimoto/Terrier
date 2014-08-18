@@ -26,6 +26,9 @@ class Env
         return ini_get($setting);
     }
 
+    // ----------------------------------------
+
+
     /**
      * Set ini value
      *

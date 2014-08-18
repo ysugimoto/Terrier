@@ -1,9 +1,20 @@
 <?php
 
+/**
+ * Terrier Template helper functions
+ *
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ * @copyright Yoshiaki Sugimoto
+ */
+
 namespace Terrier;
 
 if ( ! function_exists('input_hidden_all') )
 {
+    /**
+     * Input value set to hidden field
+     * @return string
+     */
     function input_hidden_all()
     {
         $out    = array();
@@ -19,6 +30,10 @@ if ( ! function_exists('input_hidden_all') )
 
 if ( ! function_exists('input_date_all') )
 {
+    /**
+     * Input value set to key:value
+     * @return string
+     */
     function input_data_all()
     {
         $out    = array();

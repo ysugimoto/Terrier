@@ -1,20 +1,29 @@
 <?php
 
+/**
+ * Terrier Application Index file
+ *
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ * @copyright Yoshiaki Sugimoto
+ */
+
+// load bootstrap file
 require_once(__DIR__ . '/application/boot.php');
 
-\Terrier\Env::set('default_charset', 'UTF-8');
-
+// routing and processiong
 $router   = new \Terrier\Router();
 $action   = $router->process();
 $response = new \Terrier\Response($action);
 
-if ( $response->isRedirect() )
+// Application need redirect?
+if ( \Terrier\Router::isRedirect() )
 {
-    $response->redirect();
+    $response->redirect($action);
 }
+// display HTML
 else
 {
     $response->setView(new \Terrier\View($action));
     $response->displayHeader();
-    $response->display();
+    echo $response->display();
 }

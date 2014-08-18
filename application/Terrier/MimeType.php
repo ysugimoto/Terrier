@@ -2,6 +2,15 @@
 
 namespace Terrier;
 
+/**
+ *
+ * Terrier Mailform application
+ * Application MimeType class
+ *
+ * @namespace Terrier
+ * @class MimeType
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ */
 class Mimetype
 {
     /**
@@ -23,6 +32,11 @@ class Mimetype
      */
     protected static $instance;
 
+    /**
+     * Constructor
+     *
+     * @constructor
+     */
     public function __construct()
     {
         // feature detection
@@ -31,8 +45,9 @@ class Mimetype
 
     /**
      * Get instance
-     * 
-     * @access public static
+     *
+     * @method getInstance
+     * @public static
      * @return MymeType
      */
     public static function getInstance()
@@ -51,8 +66,9 @@ class Mimetype
 
     /**
      * Bakcend detection on our environment
-     * 
-     * @access protected
+     *
+     * @method _fettureDetection
+     * @protected
      */
     protected function _featureDetection()
     {
@@ -76,8 +92,9 @@ class Mimetype
 
     /**
      * Detect mimetype
-     * 
-     * @access public
+     *
+     * @method detect
+     * @public
      * @param  string $filePath
      * @param  string $ext
      * @return mixed
@@ -104,8 +121,9 @@ class Mimetype
 
     /**
      * Detection from mimetype file list
-     * 
-     * @access protected
+     *
+     * @method _detectFromMimeList
+     * @protected
      * @param  string $path
      * @param  string $ext
      * @return mixed
@@ -113,7 +131,7 @@ class Mimetype
     protected function _detectFromMimeList($path, $ext)
     {
         $mime      = null;
-        $mimes     = $this->_getMimeTypeList();
+        $mimes     = Config::load('mimetype');
         $extension = ( ! empty($ext) ) ? $ext : $this->getFileExtension($path);
         if ( isset($mimes[$extension]) )
         {
@@ -123,23 +141,14 @@ class Mimetype
     }
 
 
-    protected function _getMimeTypeList()
-    {
-        if ( ! file_exists(COREPATH . 'system/mimetypes.php') )
-        {
-            throw new RuntimeException('Mimetype list file is not exists.');
-        }
-        include(COREPATH . 'system/mimetypes.php');
-        return $mymetypes;
-    }
-
     // ---------------------------------------------------------------
 
 
     /**
      * Simple file extension getter
-     * 
-     * @access protected
+     *
+     * @method getFileExtension
+     * @protected
      * @param  string $path
      * @return string
      */
@@ -155,8 +164,9 @@ class Mimetype
 
     /**
      * Detect mimetype by finfo function
-     * 
-     * @access protected
+     *
+     * @method finfo
+     * @protected
      * @param  string $path
      * @return mixed
      */
@@ -190,8 +200,9 @@ class Mimetype
 
     /**
      * Detect mimetype by finfo class
-     * 
-     * @access protected
+     *
+     * @method finfoClass
+     * @protected
      * @param  string $path
      * @return mixed
      */
@@ -213,8 +224,9 @@ class Mimetype
 
     /**
      * Detect mimetype by file -bi command on Unix/Linux
-     * 
-     * @access protected
+     *
+     * @method command
+     * @protected
      * @param  string $path
      * @return mixed
      */

@@ -2,15 +2,47 @@
 
 namespace Terrier;
 
+/**
+ *
+ * Terrier Mailform application
+ * Mail sender
+ *
+ * @namespace Terrier
+ * @class MailSender
+ * @author Yoshiaki Sugimoto <sugimoto@wnotes.net>
+ */
 class MailSender
 {
+    /**
+     * Mail send driver
+     *
+     * @property $driver
+     * @protected
+     * @type \Terrier\Driver/Mail
+     */
     protected $driver;
+
+    /**
+     * Mail setting
+     *
+     * @property $setting
+     * @protected
+     * @type Variable
+     */
     protected $setting;
 
+    /**
+     * Constructor
+     *
+     * @constructor
+     * @param array $setting
+     */
+     */
     public function __construct($setting)
     {
         $this->setting = new Variable($setting);
 
+        // Detect driver
         switch ( $setting['sender_method'] )
         {
             case 'smtp':
@@ -26,7 +58,20 @@ class MailSender
 
     }
 
-    public function send($to)
+
+
+    // ----------------------------------------
+
+
+    /**
+     * Send mail
+     *
+     * @method send
+     * @public
+     * @param string $to
+     * @param string $mailBody
+     */
+    public function send($to, $mailBody = 'mailbody.txt')
     {
         if ( ! $this->driver )
         {
@@ -36,12 +81,12 @@ class MailSender
         $this->driver->to($to);
         $this->driver->subject($this->setting->subject);
 
-        if ( ! file_exists(TEMPLATE_PATH . 'mailbody.txt') )
+        if ( ! file_exists(TEMPLATE_PATH . $mailBody) )
         {
             throw new Exception('Mailbody template is not exists.');
         }
 
-        $body = file_get_contents(TEMPLATE_PATH . 'mailbody.txt');
+        $body = file_get_contents(TEMPLATE_PATH . $mailBody);
         $tmpl = new Template($body);
         $tmpl->compile();
         $values = new Variable(Validation::getValues());
@@ -50,6 +95,3 @@ class MailSender
         $this->driver->send();
     }
 }
-
-
-
