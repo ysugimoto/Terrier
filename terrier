@@ -1,0 +1,23 @@
+#!/bin/sh
+
+BASEPATH=$(cd $(dirname $0) && pwd)
+
+case $1 in
+    "test") echo "Testing..."
+        ${BASEPATH}/vendor/bin/phpunit --colors --bootstrap ${BASEPATH}/application/boot.php ${BASEPATH}/application/test
+        ;;
+    "init") echo "Initialize project."
+        echo "create config."
+        cp -R ${BASEPATH}/application/config_sample ${BASEPATH}/application/config
+        echo "Apply write permission to tmp."
+        chmod -R o+w ${BASEPATH}/application/tmp
+        echo "done!"
+        ;;
+    "testinit") echo "Initialize testing modules."
+        echo "install dependency modules"
+        php ${BASEPATH}/composer.phar self-update
+        php ${BASEPATH}/composer.phar install
+        ;;
+esac
+
+exit $?
