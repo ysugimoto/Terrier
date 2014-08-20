@@ -21,9 +21,10 @@ class SmtpMail extends Driver
      */
     protected $_host;      // hostname
     protected $_port;      // port number
-    protected $_crypto;    // crypto flag
+    protected $_secure;    // secure flag
     protected $_username;  // username
     protected $_password;  // password
+    protected $_timeout;   // socket timeout
 
 
     /**
@@ -53,10 +54,11 @@ class SmtpMail extends Driver
         // set SMTP server settings from config
         $this->_host      = $this->setting->hostname;
         $this->_port      = $this->setting->port;
-        $this->_crypto    = $this->setting->crypto;
+        $this->_secure    = $this->setting->secure;
         $this->_username  = $this->setting->username;
         $this->_password  = $this->setting->password;
         $this->_keepAlive = $this->setting->keepalive;
+        $this->_timeout   = $this->setting->timeout;
     }
 
 
@@ -74,29 +76,29 @@ class SmtpMail extends Driver
         // initialize
         $this->_tos = array();
 
-        $this->cmd('MAIL FROM:<' . $this->_from . '>');
+        $this->cmd('mail from: <' . $this->_from . '>');
 
         // set To
         foreach ( $this->_to as $email )
         {
             $this->tos[] = 'To:' . $this->_addressFormat($email);
-            $this->cmd('RCPT TO:<' . $email[0] . '>');
+            $this->cmd('rcpt to: <' . $email[0] . '>');
         }
         // set Cc
         foreach ( $this->_cc as $email )
         {
             $this->tos[] = 'To:' . $this->_addressFormat($email);
-            $this->cmd('RCPT TO:<' . $email[0] . '>');
+            $this->cmd('rcpt to: <' . $email[0] . '>');
         }
         // If SMTP sending, BCC also use RCPT TO command.
         // But, don't add header parameter 
         foreach ( $this->_bcc as $email )
         {
             // Bcc is not add header.
-            $this->cmd('RCPT TO:<' . $email[0] . '>');
+            $this->cmd('rcpt to: <' . $email[0] . '>');
         }
 
-        $this->cmd('DATA');
+        $this->cmd('data');
         // mail data
         $data = array(
             $this->_createHeader(),
@@ -134,8 +136,8 @@ class SmtpMail extends Driver
         fputs($this->handle, $command . $this->CRLF);
 
         // and get response
-        $response = fgets($this->handle, 512);
-        Log::write('SMTP Command $ ' . $command . ' : ' . $respons, Log::LEVEL_INFO);
+        $response = $this->getResponse();
+        Log::write('SMTP Command $ ' . $command . ' : ' . $response, Log::LEVEL_INFO);
 
         // response code 2XX is sucess code.
         //if ( ! preg_match('/\A2[0-9]{2}/', $response) )
@@ -144,6 +146,30 @@ class SmtpMail extends Driver
             //return FALSE;
         //}
         return TRUE;
+    }
+
+    protected function getResponse()
+    {
+        $response = '';
+
+        // flush buffered response
+        stream_socket_recvfrom($this->handle, 4096);
+
+        while ( $this->checkTimeout() )
+        {
+            $chunk = fgets($this->handle, 512);
+            Log::write('SMTP Response ' . trim($chunk, $this->CRLF), Log::LEVEL_INFO);
+            $response .= $chunk;
+        }
+
+        return $response;
+    }
+
+    protected function checkTimeout()
+    {
+        $meta = stream_get_meta_data($this->handle);
+
+        return $meta['timed_out'];
     }
 
 
@@ -163,12 +189,24 @@ class SmtpMail extends Driver
         {
             throw new \Terrier\Exception('SMTP host connection refused');
         }
-        $this->cmd('EHLO ' . $this->_host);
+
+        // set stream timeout
+        stream_set_timeout($this->handle, ( $this->_timeout ) ? $this->_timeout : 3);
+
+        $this->cmd('ehlo ' . Request::server('SERVER_NAME'));
+
+        // Does SMTP server need secure connection?
+        if ( $this->_secure === true )
+        {
+            $this->cmd('starttls');
+            stream_socket_enable_crypto($this->handle, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            $this->cmd('ehlo ' . Request::server('SERVER_NAME'));
+        }
 
         // Does Server need Authenticate?
         if ( $this->_host !== 'localhost' )
         {
-            $this->cmd('AUTH LOGIN');
+            $this->cmd('auth login');
             $this->cmd(base64_encode($this->_username));
             $this->cmd(base64_encode($this->_password));
         }
@@ -205,7 +243,7 @@ class SmtpMail extends Driver
         }
 
         // SMTP need to contain Subject on header string
-        $header[] = 'Subject:' . $this->_encodeHeader($this->_subject);
+        $header[] = 'Subject: ' . $this->_encodeHeader($this->_subject);
 
         if ( ! $this->_messageID )
         {
@@ -283,7 +321,6 @@ class SmtpMail extends Driver
             {
                 $encode = 'base64';
                 $body   = chunk_split(base64_encode($dat), 76, $this->CRLF);
-                //$body   = $dat;
             }
             else
             {

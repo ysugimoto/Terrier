@@ -37,7 +37,6 @@ class MailSender
      * @constructor
      * @param array $setting
      */
-     */
     public function __construct($setting)
     {
         $this->setting = new Variable($setting);

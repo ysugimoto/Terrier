@@ -38,9 +38,31 @@ $mail['from'] = 'noreply@example.com';
  */
 $mail['from_name'] = 'Test Site';
 
+/**
+ * Send mail subject
+ * @value string
+ */
+$mail['subject'] = '[Contact]';
+
+
+/* ================= SMTP Congiuration ================ */
+
+/*
+ * Authenticate support AUTH LOGIN only.
+ *
+ * Gmail example:
+ * Gmail must connect with SSL/TLS.
+ * Therefore, We recommend these settings:
+ *
+ * $mail['hostname'] = 'smtp.gmail.com';
+ * $mail['port']     = 587;
+ * $mail['secure']   = true;
+ * $mail['username'] = 'your gmail mailaddress';
+ * $mail['password'] = 'generated app password';
+ * $mail['timeout']  = 3;
+ */
 
 /**
- * SMTP Congiuration
  * SMTP hostname
  * @value string
  */
@@ -55,10 +77,10 @@ $mail['port'] = 25;
 
 
 /**
- * SMTP Crypto connection
+ * SMTP Secure connection
  * @value bool
  */
-$mail['crypto'] = false;
+$mail['secure'] = false;
 
 
 /**
@@ -82,5 +104,12 @@ $mail['password'] = 'yourpassword';
  */
 $mail['keepalive'] = true;
 
+
+/**
+ * SMTP Connection timeout
+ * @value int
+ * @default 3
+ */
+$mail['timeout'] = 3;
 
 return $mail;
