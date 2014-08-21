@@ -1,4 +1,4 @@
-Terrier: A simple mailform written by PHP (beta)
+Terrier: PHP mailform Application (beta)
 =======
 
 TerrierはPHPで書かれたシンプルなメールフォームアプリケーションです。
