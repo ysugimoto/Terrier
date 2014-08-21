@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Terrier by ysugimoto</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/ysugimoto/Terrier">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/ysugimoto/Terrier/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/ysugimoto/Terrier/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Terrier</h1>
+          <p>A simple mailform written by PHP</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/ysugimoto">ysugimoto</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="terrier-php-mailform-application-beta" class="anchor" href="#terrier-php-mailform-application-beta"><span class="octicon octicon-link"></span></a>Terrier: PHP mailform Application (beta)</h1>
+
+<p>TerrierはPHPで書かれたシンプルなメールフォームアプリケーションです。
+設定ファイルのみで動作の変更が可能、またテンプレートエンジンを利用して各画面を要件に合わせて構築が可能です。</p>
+
+<p><strong>現在テスト項目が完全でないためベータリリースです</strong></p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>他の外部ライブラリに依存していないので、単体で動かすことが可能です。</li>
+<li>PHPとして即時コンパイル、実行するテンプレートエンジンが実装されています。HTMLファイルそのままを各画面で扱うことが可能です。</li>
+<li>規約より設定を重視しているため、設定項目のみで様々な動作の制御が可能です。PHPを書く必要はありません。</li>
+<li>関数ベースでテンプレートヘルパを拡張することも可能です。</li>
+<li>PHPのmail()関数、SMTPサーバ経由の送信に両対応しています。</li>
+<li>コア以外のファイル構造は自由に変更できます。</li>
+<li>オートセッションとCSRFトークンチェック機能が行われます。</li>
+</ul><h2>
+<a name="requirement" class="anchor" href="#requirement"><span class="octicon octicon-link"></span></a>Requirement</h2>
+
+<p>PHP5.3+</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a name="git" class="anchor" href="#git"><span class="octicon octicon-link"></span></a>Git</h3>
+
+<p>このリポジトリをクローンし、初期化コマンドを実行してください。</p>
+
+<pre><code>$ git clone https://github.com/ysugimoto/Terrier.git
+$ cd Terrier
+$ ./terrier init
+</code></pre>
+
+<p>設定ファイルの生成、一時ディレクトリの書き込み権限を発行します。</p>
+
+<h3>
+<a name="archive" class="anchor" href="#archive"><span class="octicon octicon-link"></span></a>Archive</h3>
+
+<p>アーカイブをダウンロードして、任意の場所に展開してください。初期化コマンドを発行するか、以下の処理を行ってください。</p>
+
+<ul>
+<li>
+<code>application/config_sample</code>を`application/config'にリネーム</li>
+<li>
+<code>application/tmp</code>に書き込み権限を発行</li>
+</ul><p>※書き込み権限はファイルアップロード、ロギング処理を行わない場合は不要です。</p>
+
+<p><code>http://localhost/Terrier/index.php</code>など設置した場所にアクセスして、動作を確認してください。</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Terrierは<code>application/config/</code>以下の設定ファイルを変更することでメールフォームの設定と動作の制御を行うことができます：</p>
+
+<ul>
+<li>
+<code>config/config.php</code>: アプリメインの設定項目</li>
+<li>
+<code>config/setting.php</code>: 入力項目とバリデーションの設定</li>
+<li>
+<code>config/upload.php</code>: ファイルアップロードの設定</li>
+<li>
+<code>config/mail.php</code>: メール送信に関する設定</li>
+</ul><p>詳細は各ファイルのセクションコメントを参照してください。（ドキュメント準備中）</p>
+
+<h2>
+<a name="templates" class="anchor" href="#templates"><span class="octicon octicon-link"></span></a>Templates</h2>
+
+<p>Terrierは<code>application/templates/</code>以下のファイルをテンプレートとして扱います。<code>templates</code>のディレクトリは自由な位置に変更可能、ヘルパ関数群の<code>functions.php</code>を除いてHTML/TEXTファイルそのままです。</p>
+
+<ul>
+<li>
+<code>templates/input.html</code>: 入力画面のテンプレート</li>
+<li>
+<code>templates/confirm.html</code>: 確認画面のテンプレート</li>
+<li>
+<code>templates/complete.html</code>: 完了画面のテンプレート</li>
+<li>
+<code>templates/error.html</code>: システムエラーのテンプレート</li>
+<li>
+<code>templates/mailbody.txt</code>: 管理者へ通知するメール本文</li>
+<li>
+<code>templates/reply.txt</code>: 送信者への自動返信する際のメール本文</li>
+<li>
+<code>templates/functions.php</code>: テンプレート内で利用するヘルパ関数定義ファイル`</li>
+</ul><h3>
+<a name="template-tags" class="anchor" href="#template-tags"><span class="octicon octicon-link"></span></a>Template Tags</h3>
+
+<p>テンプレートはJavaScriptのHandlebarsのように<code>{{</code><code>}}</code>で括った中身に変数をバインドします。
+テンプレート内では入力データやバリデーションエラーの他に環境変数など様々な値が使用できます（ドキュメント整備中）。また、変数は自動でエスケープされます。</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>MITライセンスに従って配布しています。ライセンスの規約内で自由にご利用ください。</p>
+
+<h2>
+<a name="attension" class="anchor" href="#attension"><span class="octicon octicon-link"></span></a>Attension</h2>
+
+<ul>
+<li>本アプリケーションの利用は自己責任にてお願いします。</li>
+<li>本アプリケーションを利用した事による事柄に対し、作者は一切の責任を負いません。</li>
+</ul><h2>
+<a name="issues" class="anchor" href="#issues"><span class="octicon octicon-link"></span></a>Issues</h2>
+
+<ul>
+<li>本アプリケーションの改善に際し、要望頂ければできるだけ反映したいと思っております。</li>
+<li>要望やバグ報告など、issuesに投稿をお願いします。</li>
+</ul>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
