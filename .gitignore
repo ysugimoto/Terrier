@@ -1,0 +1,7 @@
+.DS_Store
+vendor
+composer.lock
+composer.phar
+application/config
+application/tmp/log/*.log
+application/tmp/upload/*

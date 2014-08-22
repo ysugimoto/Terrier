@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Terrier mailform sample</title>
+        <link href="asset/fonts/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="asset/css/bootstrap-3.1.1.min.css" rel="stylesheet">
+        <link href="asset/css/lollies.min.css" rel="stylesheet">
+        <link href="asset/css/custom.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="asset/js/html5shiv-3.7.0.js"></script>
+            <script src="asset/js/respond-1.4.2.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <header id="main-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 headerMatch">
+                    <!-- LOGO -->
+                    <div id="logo"><a href="/"><img src="http://placehold.it/720x200/149cd7/149cd7" /></a></div>
+                </div>
+                <div class="col-md-6 headerMatch">
+                    <!-- MASTHEAD -->
+                    <div id="masthead-container">
+                        <div id="masthead">
+                            <!-- CALL TO ACTION -->
+                            <div class="call"><h1>Lorem ipsum 1800123123</h1><p>Consectetur adipiscing elit</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </header>
+        <div class="form-block">
+            <div class="container">
+                <div class="alert alert-success">
+                    以下の内容でよろしければ送信してください。
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label >お名前</label>
+                        <p>{{value.name}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label >メールアドレス</label>
+                        <p>{{value.email}}</p>
+                    </div>
+                    <div class="form-group">
+                        <p>{{value.gender}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label >郵便番号</label>
+                        <p>{{value.zipcode1}}-{{value.zipcode2}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>都道府県</label>
+                        <p>{{value.pref}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label >住所</label>
+                        <p>{{value.address}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label >内容</label>
+                        <p>{{value.message}}</p>
+                    </div>
+                    <form method="post" class="custom_form" name="custom_form" action="{{action.input}}" style="display:inline">
+                        {{#input_hidden_all}}
+                        <button type="submit" class="btn btn-default" id="submit">Back to input</button>
+                   </form>
+                    <form method="post" class="custom_form" name="custom_form" action="{{action.send}}" style="display:inline">
+                        {{#input_hidden_all}}
+                        <button type="submit" class="btn btn-default" id="submit">send</button>
+                   </form>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12 left">
+                        &copy; 2014 Terrier mail form.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SCRIPTS -->
+        <script src="asset/js/jquery-1.7.2.min.js"></script>
+        <script src="asset/js/bootstrap-3.1.1.min.js"></script>
+        <script src="asset/plugins/match-height/match-height-0.5.1.min.js"></script>
+        <script src="asset/js/lollies.min.js"></script>
+    </body>
+</html>
+                    

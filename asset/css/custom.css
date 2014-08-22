@@ -1,0 +1,128 @@
+/*//////////////////////////////////////////////////////////////////////////////////////////*/
+/* CUSTOM CSS (ADD YOUR CSS HERE!) */
+/*//////////////////////////////////////////////////////////////////////////////////////////*/
+
+/* PLUGIN CSS */
+@import url('../plugins/camera-slider/camera-slider-1.3.4.min.css');
+@import url('../plugins/fancybox/fancybox-1.3.4.min.css');
+@import url('../plugins/fancybox/photoswipe-3.0.5.min.css');
+@import url('../plugins/hover-animations/hover-animations-1.0.min.css');
+@import url('../plugins/justinaguilar-animations/animations.css');
+@import url('../plugins/validation/validation-2.2.min.css');
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700');
+
+/* PAGE MODULES */
+body{
+	font-family: 'Open Sans', sans-serif;
+	font-weight:300;
+	color: #005b95;
+	background: url('../img/psbg.png');
+}
+h1, .h1{
+	margin-top: 0px;
+	margin-bottom: 30px;
+}
+h2, .h2{
+	margin-top: 0px;
+	margin-bottom: 15px;
+	font-size: 20px;
+}
+p {
+	margin: 0 0 15px;
+}
+#main-header{
+	background: #0072ba;
+}
+#main-nav{
+	background: #005b95;
+}
+.content-block{
+	background: transparent;
+	padding: 30px 0px;
+}
+.service-block{
+	background: transparent;
+	padding: 30px 0px;
+}
+.content-block img{
+	margin-bottom: 30px;
+}
+.gallery-block{
+	background: transparent;
+	padding: 30px 0px;
+}
+.gallery-block img{
+	margin-bottom: 30px;
+}
+.form-block{
+	background: transparent;
+	padding: 30px 0px;
+}
+.map-block{
+	background: transparent;
+	padding: 30px 0px;
+}
+.footer-block{
+	background: transparent;
+	padding: 30px 0px;
+}
+.copyright-block{
+	background: #005b95;
+	height:60px;
+	line-height:60px;
+	color:#fff;
+}
+.copyright-block a{
+	color:#fff;
+}
+#map{
+	height:400px;	
+}
+#footer-map{
+	height:250px;	
+}
+[class*="animate-"] .overlay {
+	background: #005995;
+}
+
+/* NAVIGATION */
+.navbar-nav>li>a {
+	line-height: 60px;
+	height: 60px;
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+	color: #005b95;
+	background-color: #149cd7;
+}
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus{
+	color: #005b95;
+	background-color: #149cd7;
+}
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus{
+	color: #149cd7;
+}
+.navbar-default .navbar-nav>li>a{
+	color: #fff;
+}
+.navbar-default .navbar-toggle:hover .icon-bar{
+	background-color: #149cd7;
+}
+
+/* RESPONSIVE */
+@media (min-width: 1230px) {...}
+
+@media (min-width: 1022px) {...}
+
+@media (max-width: 1021px) {...}
+
+@media (min-width: 798px) {...}
+
+@media (max-width: 797px) {...}
+
+@media (max-width: 598px) {...}
+
+@media (max-width: 510px) {...}
+
+@media (min-width: 798px) and (max-width: 1021px) {...}
+
+@media (min-width: 1022px) and (max-width: 1229px) {...}

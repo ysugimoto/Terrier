@@ -1,0 +1,11 @@
+{
+    "launchers": {
+        "phpunit": {
+            "command": "vendor/bin/phpunit --tap --colors --bootstrap application/boot.php application/test",
+            "protocol": "tap"
+        }
+    },
+    "launch_in_dev": [
+        "phpunit"
+    ]
+}
