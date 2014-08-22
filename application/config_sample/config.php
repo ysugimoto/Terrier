@@ -54,20 +54,6 @@ $config['disable_email_filter'] = false;
 
 
 /**
- * Admin mailbody filename
- * @value string
- */
-$config['admin_mailbody'] = 'mailbody.txt';
-
-
-/**
- * Replay mailbody filename
- * @value string
- */
-$config['reply_mailbody'] = 'reply.txt';
-
-
-/**
  * Session name
  * @value string
  */

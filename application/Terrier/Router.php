@@ -319,7 +319,7 @@ class Router
         {
             try
             {
-                $mailer->send($setting['admin_email'], Config::get('admin_mailbody'));
+                $mailer->send($setting['admin_email'], $setting['admin_mailbody']);
             }
             catch ( \Terrier\Exception $e )
             {
@@ -334,7 +334,7 @@ class Router
             $to = Validation::getValue($field);
             try
             {
-                $mailer->send($to, Config::get('reply_mailbody'));
+                $mailer->send($to, $setting['reply_mailbody']);
             }
             catch ( \Terrier\Exception $e )
             {

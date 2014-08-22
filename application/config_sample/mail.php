@@ -44,6 +44,20 @@ $mail['from_name'] = 'Test Site';
  */
 $mail['subject'] = '[Contact]';
 
+/**
+ * Admin mailbody filename
+ * @value string
+ */
+$mail['admin_mailbody'] = 'mailbody.txt';
+
+
+/**
+ * Replay mailbody filename
+ * @value string
+ */
+$mail['reply_mailbody'] = 'reply.txt';
+
+
 
 /* ================= SMTP Congiuration ================ */
 
