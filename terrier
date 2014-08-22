@@ -14,8 +14,14 @@ case $1 in
         echo "done!"
         ;;
     "testinit") echo "Initialize testing modules."
+        if [ ! -f "${BASEDIR}/composer.phar" ]; then
+            echo "composer not found. install this."
+            curl -sS https://getcomposer.org/installer | php -- --install-dir=${BASEPATH}
+        else
+            echo "composer found. update self."
+            php ${BASEPATH}/composer.phar self-update
+        fi
         echo "install dependency modules"
-        php ${BASEPATH}/composer.phar self-update
         php ${BASEPATH}/composer.phar install
         ;;
 esac
