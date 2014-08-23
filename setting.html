@@ -56,6 +56,24 @@
 <li><code>reply</code> - このフィールドを自動返信対象にします。値はメールアドレスの形式である必要があります。</li>
 </ul>
 
+<p>例えば、自動返信を行なうメールアドレスの検証フィールドを作る場合、以下のようになります。</p>
+
+<pre><code>
+// HTML
+&lt;input type="email" name="email" value=""&gt;
+
+// setting.php
+$setting['email'] = array(
+    'label' =&gt; 'メールアドレス',
+    'reply' =&gt; true,  // 自動返信指定
+    'rules' =&gt; array(
+        'required',
+        'valid_email',
+        'max_length@100'
+    )
+);
+</code></pre>
+
 <hr>
 
 <h2>
