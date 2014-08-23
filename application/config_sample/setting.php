@@ -37,7 +37,7 @@ $setting['gender'] = array(
     'label'  => '性別',
     'rules'  => array(
         'required',
-        'expected@男性:女性'
+        'expects@男性:女性'
     )
 );
 
