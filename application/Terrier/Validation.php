@@ -321,12 +321,12 @@ class Validation
      * @method expected
      * @public
      * @param  string $str
-     * poaram  [string, ...]
+     * poaram  string $expectedList
      * @return bool
      */
-    public function expected($str)
+    public function expected($str, $expectedList = '')
     {
-        $expects = array_slice(func_get_args(), 1);
+        $expects = array_filter(explode(':', $expectedList));
 
         return ( in_array($str, $expects) ) ? TRUE : FALSE;
     }
@@ -682,26 +682,6 @@ class Validation
     public function numeric($str)
     {
         return is_numeric($str);
-    }
-
-
-    // --------------------------------------------------
-
-
-    /**
-     * Value is expected
-     *
-     * @method expects
-     * @public
-     * @param  string $str
-     * @pram   string cond
-     * @return bool
-     */
-    public function expects($str, $cond)
-    {
-        $expected = array_filter(explode(':', $cond));
-
-        return in_array($str, $expected);
     }
 
 
