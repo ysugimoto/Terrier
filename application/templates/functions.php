@@ -28,7 +28,7 @@ if ( ! function_exists('input_hidden_all') )
     }
 }
 
-if ( ! function_exists('input_date_all') )
+if ( ! function_exists('input_data_all') )
 {
     /**
      * Input value set to key:value
