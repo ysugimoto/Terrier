@@ -51,9 +51,9 @@
 一つのフィールドに対する定義項目は以下の通りです。</p>
 
 <ul>
-<li><code>label</code> - 項目名を文字列で指定します。バリデーションエラーや送信時のフィールド名として使用されます。</li>
-<li><code>rules</code> - 検証ルールを配列で指定します。ルールの詳細は次を参照してください。</li>
-<li><code>reply</code> - このフィールドを自動返信対象にします。値はメールアドレスの形式である必要があります。</li>
+<li><code>"label"</code> - 項目名を文字列で指定します。バリデーションエラーや送信時のフィールド名として使用されます。</li>
+<li><code>"rules"</code> - 検証ルールを配列で指定します。ルールの詳細は次を参照してください。</li>
+<li><code>"reply"</code> - このフィールドを自動返信対象にします。値はメールアドレスの形式である必要があります。</li>
 </ul>
 
 <p>例えば、自動返信を行なうメールアドレスの検証フィールドを作る場合、以下のようになります。</p>
@@ -79,38 +79,38 @@ $setting['email'] = array(
 <h2>
 <a name="rules" class="anchor" href="#rules"><span class="octicon octicon-link"></span></a>Validation Rules</h2>
 
-<p>検証ルールは以下が標準で実装されています。ルールには、検証に成功したかどうか（true/falseを返却するもの）と、値を加工するものがあります。また、<code>@<code>続いて検証パラメータを渡すものがあります。例えば10文字以内に制限する場合、検証ルールは`max_length@10`と記述します。検証パラメータは</code>:</code>区切りで複数渡すものもあります。</p>
+<p>検証ルールは以下が標準で実装されています。ルールには、検証に成功したかどうか（true/falseを返却するもの）と、値を加工するものがあります。また、<code>"@"</code>続いて検証パラメータを渡すものがあります。例えば10文字以内に制限する場合、検証ルールは<code>"max_length@10"</code>と記述します。検証パラメータは<code>":"</code>区切りで複数渡すものもあります。</p>
 
 <ul>
-<li><code>alnum</code> - 値が半角英数のみかどうかを検証します。</li>
-<li><code>alnum_dash</code> - 値が半角英数、<code>-</code>、<code>_</code>のみかどうかを検証します。</li>
-<li><code>alpha</code> - 値が半角英字のみかどうかを検証します。</li>
-<li><code>alpha_dash</code> - 値が半角英字、<code>-</code>、<code>_</code>のみかどうかを検証します。</li>
-<li><code>alpha_lower</code> - 値が半角英小文字のみかどうかを検証します。</li>
-<li><code>alpha_upper</code> - 値が半角英大文字のみかどうかを検証します。</li>
-<li><code>dateformat</code> - 値が時刻形式として妥当かどうかを検証します。日付の区切りをオプションパラメータで指定できます（初期値は<code>-</code>）。</li>
-<li><code>exact_date</code> - 妥当な日付かどうかを検証します。例えば、<code>2014-09-32</code>などは検証に失敗します。日付の区切りをオプションパラメータで指定できます（初期値は<code>-</code>）。</li>
-<li><code>future_date</code> - 現在よりも未来の日付かどうかを検証します。</li>
-<li><code>past_date</code> - 現在よりも過去の日付かどうかを検証します。</li>
-<li><code>max_length</code> - 値が指定文字数以内どうかを検証します。追加パラメータで文字数を指定します。</li>
-<li><code>min_length</code> - 値が指定文字数以上どうかを検証します。追加パラメータで文字数を指定します。</li>
-<li><code>exact_length</code> - 値が指定文字数に一致するかどうかを検証します。追加パラメータで文字数を指定します。</li>
-<li><code>numeric</code> - 値がPHPにおける数値として判定可能かどうかを検証します（<code>is_numeric()</code>関数で検証）。</li>
-<li><code>range</code> - 値が指定範囲内の数値かどうかを判定します。追加パラメータは2つ必要です。</li>
-<li><code>required</code> - 値が入力されているかどうかを検証します。</li>
-<li><code>expects</code> - 値が指定した文字列リストに存在するかどうかを検証します。</li>
-<li><code>blank</code> - 値が空文字かどうかを検証します。</li>
-<li><code>valid_email</code> - 値がメールアドレスとして妥当な形式かどうかを検証します。</li>
-<li><code>valid_url</code> - 値がURLとして妥当な形式かどうかを検証します。</li>
-<li><code>ctype</code> - 値が半角数字のみかどうかを検証します。</li>
-<li><code>unsigned</code> - 値が正の整数かどうかを検証します。</li>
-<li><code>regex</code> - 値が正規表現にマッチするかどうかを検証します。追加パラメータに正規表現を指定します。</li>
-<li><code>zipcode</code> - 値が郵便番号形式（<code>XXX-XXXX</code>）として妥当かどうかを検証します。</li>
-<li><code>matches</code> - 値がもう一方の値を一致するかどうかを検証します。</li>
-<li><code>hiragana</code> - 値がひらがなのみであるかどうかを検証します。</li>
-<li><code>kana</code> - 値がカタカナのみであるかどうかを検証します。</li>
-<li><code>conv_kana</code> - 全角カタカナを半角カタカナに変換します。</li>
-<li><code>conv_num</code> - 全角数字を半角数字に変換します。</li>
+<li><code>"alnum"</code> - 値が半角英数のみかどうかを検証します。</li>
+<li><code>"alnum_dash"</code> - 値が半角英数、<code>"-"</code>、<code>"_"</code>のみかどうかを検証します。</li>
+<li><code>"alpha"</code> - 値が半角英字のみかどうかを検証します。</li>
+<li><code>"alpha_dash"</code> - 値が半角英字、<code>"-"</code>、<code>"_"</code>のみかどうかを検証します。</li>
+<li><code>"alpha_lower"</code> - 値が半角英小文字のみかどうかを検証します。</li>
+<li><code>"alpha_upper"</code> - 値が半角英大文字のみかどうかを検証します。</li>
+<li><code>"dateformat"</code> - 値が時刻形式として妥当かどうかを検証します。日付の区切りをオプションパラメータで指定できます（初期値は<code>"-"</code>）。</li>
+<li><code>"exact_date"</code> - 妥当な日付かどうかを検証します。例えば、<code>"2014-09-32"</code>などは検証に失敗します。日付の区切りをオプションパラメータで指定できます（初期値は<code>"-"</code>）。</li>
+<li><code>"future_date"</code> - 現在よりも未来の日付かどうかを検証します。</li>
+<li><code>"past_date"</code> - 現在よりも過去の日付かどうかを検証します。</li>
+<li><code>"max_length"</code> - 値が指定文字数以内どうかを検証します。追加パラメータで文字数を指定します。</li>
+<li><code>"min_length"</code> - 値が指定文字数以上どうかを検証します。追加パラメータで文字数を指定します。</li>
+<li><code>"exact_length"</code> - 値が指定文字数に一致するかどうかを検証します。追加パラメータで文字数を指定します。</li>
+<li><code>"numeric"</code> - 値がPHPにおける数値として判定可能かどうかを検証します（<code>"is_numeric()"</code>関数で検証）。</li>
+<li><code>"range"</code> - 値が指定範囲内の数値かどうかを判定します。追加パラメータは2つ必要です。</li>
+<li><code>"required"</code> - 値が入力されているかどうかを検証します。</li>
+<li><code>"expects"</code> - 値が指定した文字列リストに存在するかどうかを検証します。</li>
+<li><code>"blank"</code> - 値が空文字かどうかを検証します。</li>
+<li><code>"valid_email"</code> - 値がメールアドレスとして妥当な形式かどうかを検証します。</li>
+<li><code>"valid_url"</code> - 値がURLとして妥当な形式かどうかを検証します。</li>
+<li><code>"ctype"</code> - 値が半角数字のみかどうかを検証します。</li>
+<li><code>"unsigned"</code> - 値が正の整数かどうかを検証します。</li>
+<li><code>"regex"</code> - 値が正規表現にマッチするかどうかを検証します。追加パラメータに正規表現を指定します。</li>
+<li><code>"zipcode"</code> - 値が郵便番号形式（<code>"XXX-XXXX"</code>）として妥当かどうかを検証します。</li>
+<li><code>"matches"</code> - 値がもう一方の値を一致するかどうかを検証します。</li>
+<li><code>"hiragana"</code> - 値がひらがなのみであるかどうかを検証します。</li>
+<li><code>"kana"</code> - 値がカタカナのみであるかどうかを検証します。</li>
+<li><code>"conv_kana"</code> - 全角カタカナを半角カタカナに変換します。</li>
+<li><code>"conv_num"</code> - 全角数字を半角数字に変換します。</li>
 </ul>
 
       </section>

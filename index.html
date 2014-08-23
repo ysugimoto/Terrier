@@ -70,7 +70,8 @@
 
 <p>このリポジトリをクローンし、初期化コマンドを実行してください。</p>
 
-<pre><code>$ git clone https://github.com/ysugimoto/Terrier.git
+<pre><code>
+$ git clone https://github.com/ysugimoto/Terrier.git
 $ cd Terrier
 $ ./terrier init
 </code></pre>
@@ -84,53 +85,53 @@ $ ./terrier init
 
 <ul>
 <li>
-<code>application/config_sample</code>を`application/config'にリネーム</li>
+<code>"application/config_sample"</code>を<code>"application/config"</code>にリネーム</li>
 <li>
-<code>application/tmp</code>に書き込み権限を発行</li>
+<code>"application/tmp"</code>に書き込み権限を発行</li>
 </ul><p>※書き込み権限はファイルアップロード、ロギング処理を行わない場合は不要です。</p>
 
-<p><code>http://localhost/Terrier/index.php</code>など設置した場所にアクセスして、動作を確認してください。</p>
+<p><code>"http://localhost/Terrier/index.php"</code>など設置した場所にアクセスして、動作を確認してください。</p>
 
 <h2>
 <a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
-<p>Terrierは<code>application/config/</code>以下の設定ファイルを変更することでメールフォームの設定と動作の制御を行うことができます：</p>
+<p>Terrierは<code>"application/config/"</code>以下の設定ファイルを変更することでメールフォームの設定と動作の制御を行うことができます：</p>
 
 <ul>
 <li>
-<code>config/config.php</code>: アプリメインの設定項目</li>
+<code>"config/config.php"</code>: アプリメインの設定項目</li>
 <li>
-<code>config/setting.php</code>: 入力項目とバリデーションの設定</li>
+<code>"config/setting.php"</code>: 入力項目とバリデーションの設定</li>
 <li>
-<code>config/upload.php</code>: ファイルアップロードの設定</li>
+<code>"config/upload.php"</code>: ファイルアップロードの設定</li>
 <li>
-<code>config/mail.php</code>: メール送信に関する設定</li>
+<code>"config/mail.php"</code>: メール送信に関する設定</li>
 </ul><p>詳細は各ファイルのセクションコメント、及び<a href="configuration.html">Configuration</a>、<a href="setting.html">Settings</a>を参照してください。</p>
 
 <h2>
 <a name="templates" class="anchor" href="#templates"><span class="octicon octicon-link"></span></a>Templates</h2>
 
-<p>Terrierは<code>application/templates/</code>以下のファイルをテンプレートとして扱います。<code>templates</code>のディレクトリは自由な位置に変更可能、ヘルパ関数群の<code>functions.php</code>を除いてHTML/TEXTファイルそのままです。</p>
+<p>Terrierは<code>"application/templates/"</code>以下のファイルをテンプレートとして扱います。<code>"templates"</code>のディレクトリは自由な位置に変更可能、ヘルパ関数群の<code>"functions.php"</code>を除いてHTML/TEXTファイルそのままです。</p>
 
 <ul>
 <li>
-<code>templates/input.html</code>: 入力画面のテンプレート</li>
+<code>"templates/input.html"</code>: 入力画面のテンプレート</li>
 <li>
-<code>templates/confirm.html</code>: 確認画面のテンプレート</li>
+<code>"templates/confirm.html"</code>: 確認画面のテンプレート</li>
 <li>
-<code>templates/complete.html</code>: 完了画面のテンプレート</li>
+<code>"templates/complete.html"</code>: 完了画面のテンプレート</li>
 <li>
-<code>templates/error.html</code>: システムエラーのテンプレート</li>
+<code>"templates/error.html"</code>: システムエラーのテンプレート</li>
 <li>
-<code>templates/mailbody.txt</code>: 管理者へ通知するメール本文</li>
+<code>"templates/mailbody.txt"</code>: 管理者へ通知するメール本文</li>
 <li>
-<code>templates/reply.txt</code>: 送信者への自動返信する際のメール本文</li>
+<code>"templates/reply.txt"</code>: 送信者への自動返信する際のメール本文</li>
 <li>
-<code>templates/functions.php</code>: テンプレート内で利用するヘルパ関数定義ファイル</li>
+<code>"templates/functions.php"</code>: テンプレート内で利用するヘルパ関数定義ファイル</li>
 </ul><h3>
 <a name="template-tags" class="anchor" href="#template-tags"><span class="octicon octicon-link"></span></a>Template Tags</h3>
 
-<p>テンプレートはJavaScriptのHandlebarsのように<code>{{</code><code>}}</code>で括った中身に変数をバインドします。
+<p>テンプレートはJavaScriptのHandlebarsのように<code>"{{"</code><code>"}}"</code>で括った中身に変数をバインドします。
 テンプレート内では入力データやバリデーションエラーの他に環境変数など様々な値が使用できます（<a href="templates.html">Temaplate</a>の項を参照）。また、変数は自動でエスケープされます。</p>
 
 <h2>
