@@ -65,8 +65,8 @@ Terrier側で予めアサインされた以下の値が使用でき、出力す�
 <p>例えば、<code>name</code>フィールドへの値の設置とバリデーションエラーの出力は以下のようになります。</p>
 
 <pre><code>
-&gt;input type="text" name="name" value"{{value.name}}"&lt;
-&gt;p class="error"&lt;{{error.name}}&gt;/p&lt;
+&lt;input type="text" name="name" value"{{value.name}}"&gt;
+&lt;p class="error"&gt;{{error.name}}&lt;/p&gt;
 </code></pre>
 
 <p>なお、<code>"{{%アクセス名}}"</code>とすることで、エスケープしない値を出力することも可能ですが、非推奨です。</p>
@@ -79,7 +79,7 @@ Terrier側で予めアサインされた以下の値が使用でき、出力す�
 <pre><code>
 // バリデーションエラーがあれば表示する
 {{if error.name}}
-&gt;p class="error"&lt;{{error.name}}&gt;/&lt;
+&lt;p class="error"&gt;{{error.name}}&lt;/&gt;
 {{/if}}
 </code></pre>
 
@@ -88,7 +88,7 @@ Terrier側で予めアサインされた以下の値が使用でき、出力す�
 <pre><code>
 // 選択値が1より大きい場合に文言を表示
 {{if value.select &gt; 1}}
-&gt;p&lt;選択値が1より大きいです&gt;/&lt;
+&lt;p&gt;選択値が1より大きいです&lt;/&gt;
 {{/if}}
 </code></pre>
 
@@ -97,7 +97,7 @@ Terrier側で予めアサインされた以下の値が使用でき、出力す�
 <pre><code>
 // バリデーションエラー一覧を出力
 {{for error}}
-&gt;p class="error"&lt;フィールド名：{{@index}}、メッセージ：{{@data}}&gt;/&lt;
+&lt;p class="error"&gt;フィールド名：{{@index}}、メッセージ：{{@data}}&lt;/&gt;
 {{/for}}
 </code></pre>
 
