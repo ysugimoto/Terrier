@@ -39,194 +39,57 @@
         </div>
 
         <h1>
-<a name="terrier-php-mailform-application-beta" class="anchor" href="#terrier-php-mailform-application-beta"><span class="octicon octicon-link"></span></a>Configuration</h1>
+<a name="terrier-php-mailform-application-beta" class="anchor" href="#terrier-php-mailform-application-beta"><span class="octicon octicon-link"></span></a>Settings</h1>
 
-<p>このページではTerrierのアプリケーションの挙動に際しての設定項目を解説しています。<br>
-    設定項目の意味と初期値を記述していますが、実際の初期値は該当ファイルを確認してください。
-</p>
+<p>このページではTerrierの入力項目に対するバリデーションの設定について解説しています。</p>
 
 <h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>config/config.php</h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>config/setting.php</h2>
 
-<p>アプリケーションコアの挙動制御設定ファイルです。</p>
-
-<h3>$config['logging_level']</h3>
-
-<p>アプリケーション内のログ出力レベルを設定します。値と対応は以下の通りで、デフォルト値は1です。</p>
+<p>各入力項目に対する設定を配列要素として定義していきます（ここだけPHPを書く必要があります）。<br>
+入力フィールド名（input要素のname属性の値）を配列のキーとします。そのため、日本語フィールド名は推奨されません。<br>
+一つのフィールドに対する定義項目は以下の通りです。</p>
 
 <ul>
-<li>`0(0x00)` - ログ出力しません。</li>
-<li>`1(0x01)` - INFOレベルのログを出力します。INFOレベルは、メール送信ログなど、動作中の流れを出力します（推奨レベル）。</li>
-<li>`2(0x02)` - WARNレベルのログを出力します。WARNレベルは、システムエラーにつながるようなものを出力します。</li>
+<li>`label` - 項目名を文字列で指定します。バリデーションエラーや送信時のフィールド名として使用されます。</li>
+<li>`rules` - 検証ルールを配列で指定します。ルールの詳細は次を参照してください。</li>
+<li>`reply` - このフィールドを自動返信対象にします。値はメールアドレスの形式である必要があります。</li>
 </ul>
 
-<h3>$config['template_path'];</h3>
-
-<p>テンプレートファイルの位置を設定します。初期値は`templates`です。テンプレートディレクトリをドキュメントルート外などに移動させた場合は変更してください。`application/`からの相対パスです。</p>
-
-<h3>$config['tmp_path'];</h3>
-
-<p>テンポラリファイルの位置を設定します。初期値は`tmp`です。テンポラリディレクトリをドキュメントルート外などに移動させた場合は変更してください。`application/`からの相対パスです。</p>
-
-<h3>$config['disable_email_filter'];</h3>
-
-<p>`filter_var()`関数ではチェックできないメールアドレス（日本語メールアドレスなど）の検証の有効/無効を切り替えます。</p>
-
-<ul>
-<li>`false` - 検証は有効です。</li>
-<li>`true` - 検証は無効です。大抵のメールアドレスはバリデーションに通過します。</li>
-</ul>
-
-<h3>$config['encrypt_cipher'];</h3>
-
-<p>セッション暗号化のシード文字列です。任意のランダムな文字列に変更してください。</p>
-
-<h3>$config['session_name'];</h3>
-
-<p>セッション名の指定です。導入毎に変更してください。</p>
-
-<h3>$config['session_auth_name'];</h3>
-
-<p>内部セッション認証のキー文字列です。導入毎に変更してください。</p>
-
-<h3>$config['session_lifetime'];</h3>
-
-<p>セッションデータの有効期間です。頻繁に切れてしまう場合、また長時間画面を開き続けるケースでは長めに設定すると良いでしょう。</p>
+<hr>
 
 <h2>
-<a name="mail" class="anchor" href="#mail"><span class="octicon octicon-link"></span></a>config/mail.php</h2>
+<a name="rules" class="anchor" href="#rules"><span class="octicon octicon-link"></span></a>Validation Rules</h2>
 
-<p>メール送信に関する設定です。差出人や件名などはこのファイルで設定可能です。</p>
-
-<h3>$mail['sender_method']</h3>
-
-<p>メール送信の手法を選択します。デフォルトは`php`です。</p>
+<p>検証ルールは以下が標準で実装されています。ルールには、検証に成功したかどうか（true/falseを返却するもの）と、値を加工するものがあります。また、`@`続いて検証パラメータを渡すものがあります。例えば10文字以内に制限する場合、検証ルールは`max_length@10`と記述します。検証パラメータは`:`区切りで複数渡すものもあります。</p>
 
 <ul>
-<li>`php` - PHP組み込みの`mail()`関数を使って送信します。</li>
-<li>`smtp` - SMTPサーバへSocket接続し、メールを送信します。このパラメータを指定する場合、後述するSMTPサーバに関する設定も必要です。</li>
+<li>`alnum` - 値が半角英数のみかどうかを検証します。</li>
+<li>`alnum_dash` - 値が半角英数、`-`、`_`のみかどうかを検証します。</li>
+<li>`alpha` - 値が半角英字のみかどうかを検証します。</li>
+<li>`alpha_dash` - 値が半角英字、`-`、`_`のみかどうかを検証します。</li>
+<li>`alpha_lower` - 値が半角英小文字のみかどうかを検証します。</li>
+<li>`alpha_upper` - 値が半角英大文字のみかどうかを検証します。</li>
+<li>`dateformat` - 値が時刻形式として妥当かどうかを検証します。日付の区切りをオプションパラメータで指定できます（初期値は`-`）。</li>
+<li>`exact_date` - 妥当な日付かどうかを検証します。例えば、`2014-09-32`などは検証に失敗します。日付の区切りをオプションパラメータで指定できます（初期値は`-`）。</li>
+<li>`future_date` - 現在よりも未来の日付かどうかを検証します。</li>
+<li>`past_date` - 現在よりも過去の日付かどうかを検証します。</li>
+<li>`max_length` - 値が指定文字数以内どうかを検証します。追加パラメータで文字数を指定します。</li>
+<li>`min_length` - 値が指定文字数以上どうかを検証します。追加パラメータで文字数を指定します。</li>
+<li>`exact_length` - 値が指定文字数に一致するかどうかを検証します。追加パラメータで文字数を指定します。</li>
+<li>`numeric` - 値がPHPにおける数値として判定可能かどうかを検証します（`is_numeric()`関数で検証）。</li>
+<li>`range` - 値が指定範囲内の数値かどうかを判定します。追加パラメータは2つ必要です。</li>
+<li>`required` - 値が入力されているかどうかを検証します。</li>
+<li>`expected` - 値が指定した文字列リストに存在するかどうかを検証します。</li>
+<li>`blank` - 値が空文字かどうかを検証します。</li>
+<li>`valid_email` - 値がメールアドレスとして妥当な形式かどうかを検証します。</li>
+<li>`valid_url` - 値がURLとして妥当な形式かどうかを検証します。</li>
+<li>`ctype` - 値が半角数字のみかどうかを検証します。</li>
+<li>`unsigned` - 値が正の整数かどうかを検証します。</li>
+<li>`regex` - 値が正規表現にマッチするかどうかを検証します。追加パラメータに正規表現を指定します。</li>
+<li>`zipcode` - 値が郵便番号形式（`XXX-XXXX`）として妥当かどうかを検証します。</li>
+<li>`matches` - 値がもう一方の値を一致するかどうかを検証します。</li>
 </ul>
-
-<h3>$mail['admin_email']</h3>
-
-<p>管理者のメールアドレスを設定します。送信があった場合、このメールアドレスに通知されます。</p>
-
-<h3>$mail['from']</h3>
-
-<p>メールの差出人のアドレスを設定します（必須）。管理者と同じ場合でも同じ値を指定してください。</p>
-
-<h3>$mail['from_name']</h3>
-
-<p>メールの差出人の名前を設定します（任意）。</p>
-
-<h3>$mail['subject']</h3>
-
-<p>メールの件名を設定します（必須）。</p>
-
-<h3>$mail['admin_mailbody']</h3>
-
-<p>管理者へ通知するメール本文のファイル名を指定します。</p>
-
-<h3>$mail['reply_mailbody']</h3>
-
-<p>送信者へ通知するメール本文のファイル名を指定します。</p>
-
-<h2>SMTP settings</h2>
-
-<p>以下はSMTPサーバ経由で送信する場合に設定が必要です。</p>
-
-<h3>$mail['hostname']</h3>
-
-<p>SMTPサーバのホスト名です。</p>
-
-<h3>$mail['port']</h3>
-
-<p>SMTPサーバのポート番号です。</p>
-
-<h3>$mail['secure']</h3>
-
-<p>SMTPサーバがセキュア接続を要求する場合、trueを指定してください。</p>
-
-<h3>$mail['username']</h3>
-
-<p>SMTPサーバのログイン名です。</p>
-
-<h3>$mail['password']</h3>
-
-<p>SMTPサーバのログインパスワードです。</p>
-
-<h3>$mail['timeout']</h3>
-
-<p>SMTPサーバの接続タイムアウト秒数です。</p>
-
-<a name="requirement" class="anchor" href="#requirement"><span class="octicon octicon-link"></span></a>Requirement</h2>
-
-<h2>
-<a name="upload" class="anchor" href="#upload"><span class="octicon octicon-link"></span></a>config/upload.php</h2>
-
-<p>ファイルアップロードに関する設定です。</p>
-
-<h3>$upload['upload_dir']</h3>
-
-<p>アップロードファイルの保存先を指定します。</p>
-
-<h3>$upload['encrypt_filename']</h3>
-
-<p>アップロードファイルを暗号化するかどうかの指定です。</p>
-
-<ul>
-<li>`false` - ファイルは暗号化されません。そのままのファイル名が使われます。</li>
-<li>`true` - ファイル名は暗号化されます。</li>
-</ul>
-
-<h3>$upload['multiple_numbering'](deprecate)</h3>
-
-<p>ファイルは連番で管理されます。</p>
-
-<h3>$upload['allowed_extension']</h3>
-
-<p>アップロードを許可する拡張子リストを`|`区切りで指定します。</p>
-
-<h3>$upload['suffix_scriptfile']</h3>
-
-<p>実行すると危険なファイル(.php/.jsなど）に.txtの拡張子を付与します。</p>
-
-<ul>
-<li>`false` - 拡張子は付与されません。</li>
-<li>`true` - 拡張子は付与されます。</li>
-</ul>
-
-<h3>$upload['extension_tolower']</h3>
-
-<p>`.JPG`などの大文字の拡張子を小文字に統一します。</p>
-
-<ul>
-<li>`false` - 小文字に統一されません。</li>
-<li>`true` -  小文字に統一されます。</li>
-</ul>
-
-<h3>$upload['image_only']</h3>
-
-<p>画像ファイルのみのアップロードを許可します。</p>
-
-<ul>
-<li>`false` - 全てのファイルアップロードを許可します。</li>
-<li>`true` -  画像のみに制限されます。</li>
-</ul>
-
-<p>以下の設定項目は`image_only`が指定された時のみ有効なオプションです。</p>
-
-<h3>$upload['max_filesize']</h3>
-
-<p>アップロードできるファイルサイズに制限を数値で指定します。</p>
-
-<h3>$upload['max_width']</h3>
-
-<p>アップロードできる画像の横幅を数値で指定します。</p>
-
-<h3>$upload['max_height']</h3>
-
-<p>アップロードできる画像の縦幅を数値で指定します。</p>
 
       </section>
 

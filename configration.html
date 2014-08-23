@@ -50,6 +50,8 @@
 
 <p>アプリケーションコアの挙動制御設定ファイルです。</p>
 
+<hr>
+
 <h3>$config['logging_level']</h3>
 
 <p>アプリケーション内のログ出力レベルを設定します。値と対応は以下の通りで、デフォルト値は1です。</p>
@@ -60,13 +62,19 @@
 <li>`2(0x02)` - WARNレベルのログを出力します。WARNレベルは、システムエラーにつながるようなものを出力します。</li>
 </ul>
 
+<hr>
+
 <h3>$config['template_path'];</h3>
 
 <p>テンプレートファイルの位置を設定します。初期値は`templates`です。テンプレートディレクトリをドキュメントルート外などに移動させた場合は変更してください。`application/`からの相対パスです。</p>
 
+<hr>
+
 <h3>$config['tmp_path'];</h3>
 
 <p>テンポラリファイルの位置を設定します。初期値は`tmp`です。テンポラリディレクトリをドキュメントルート外などに移動させた場合は変更してください。`application/`からの相対パスです。</p>
+
+<hr>
 
 <h3>$config['disable_email_filter'];</h3>
 
@@ -77,26 +85,38 @@
 <li>`true` - 検証は無効です。大抵のメールアドレスはバリデーションに通過します。</li>
 </ul>
 
+<hr>
+
 <h3>$config['encrypt_cipher'];</h3>
 
 <p>セッション暗号化のシード文字列です。任意のランダムな文字列に変更してください。</p>
+
+<hr>
 
 <h3>$config['session_name'];</h3>
 
 <p>セッション名の指定です。導入毎に変更してください。</p>
 
+<hr>
+
 <h3>$config['session_auth_name'];</h3>
 
 <p>内部セッション認証のキー文字列です。導入毎に変更してください。</p>
+
+<hr>
 
 <h3>$config['session_lifetime'];</h3>
 
 <p>セッションデータの有効期間です。頻繁に切れてしまう場合、また長時間画面を開き続けるケースでは長めに設定すると良いでしょう。</p>
 
+<hr>
+
 <h2>
 <a name="mail" class="anchor" href="#mail"><span class="octicon octicon-link"></span></a>config/mail.php</h2>
 
 <p>メール送信に関する設定です。差出人や件名などはこのファイルで設定可能です。</p>
+
+<hr>
 
 <h3>$mail['sender_method']</h3>
 
@@ -107,68 +127,98 @@
 <li>`smtp` - SMTPサーバへSocket接続し、メールを送信します。このパラメータを指定する場合、後述するSMTPサーバに関する設定も必要です。</li>
 </ul>
 
+<hr>
+
 <h3>$mail['admin_email']</h3>
 
 <p>管理者のメールアドレスを設定します。送信があった場合、このメールアドレスに通知されます。</p>
+
+<hr>
 
 <h3>$mail['from']</h3>
 
 <p>メールの差出人のアドレスを設定します（必須）。管理者と同じ場合でも同じ値を指定してください。</p>
 
+<hr>
+
 <h3>$mail['from_name']</h3>
 
 <p>メールの差出人の名前を設定します（任意）。</p>
+
+<hr>
 
 <h3>$mail['subject']</h3>
 
 <p>メールの件名を設定します（必須）。</p>
 
+<hr>
+
 <h3>$mail['admin_mailbody']</h3>
 
 <p>管理者へ通知するメール本文のファイル名を指定します。</p>
+
+<hr>
 
 <h3>$mail['reply_mailbody']</h3>
 
 <p>送信者へ通知するメール本文のファイル名を指定します。</p>
 
+<hr>
+
 <h2>SMTP settings</h2>
 
 <p>以下はSMTPサーバ経由で送信する場合に設定が必要です。</p>
+
+<hr>
 
 <h3>$mail['hostname']</h3>
 
 <p>SMTPサーバのホスト名です。</p>
 
+<hr>
+
 <h3>$mail['port']</h3>
 
 <p>SMTPサーバのポート番号です。</p>
+
+<hr>
 
 <h3>$mail['secure']</h3>
 
 <p>SMTPサーバがセキュア接続を要求する場合、trueを指定してください。</p>
 
+<hr>
+
 <h3>$mail['username']</h3>
 
 <p>SMTPサーバのログイン名です。</p>
+
+<hr>
 
 <h3>$mail['password']</h3>
 
 <p>SMTPサーバのログインパスワードです。</p>
 
+<hr>
+
 <h3>$mail['timeout']</h3>
 
 <p>SMTPサーバの接続タイムアウト秒数です。</p>
 
-<a name="requirement" class="anchor" href="#requirement"><span class="octicon octicon-link"></span></a>Requirement</h2>
+<hr>
 
 <h2>
 <a name="upload" class="anchor" href="#upload"><span class="octicon octicon-link"></span></a>config/upload.php</h2>
 
 <p>ファイルアップロードに関する設定です。</p>
 
+<hr>
+
 <h3>$upload['upload_dir']</h3>
 
 <p>アップロードファイルの保存先を指定します。</p>
+
+<hr>
 
 <h3>$upload['encrypt_filename']</h3>
 
@@ -179,13 +229,19 @@
 <li>`true` - ファイル名は暗号化されます。</li>
 </ul>
 
+<hr>
+
 <h3>$upload['multiple_numbering'](deprecate)</h3>
 
 <p>ファイルは連番で管理されます。</p>
 
+<hr>
+
 <h3>$upload['allowed_extension']</h3>
 
 <p>アップロードを許可する拡張子リストを`|`区切りで指定します。</p>
+
+<hr>
 
 <h3>$upload['suffix_scriptfile']</h3>
 
@@ -196,6 +252,8 @@
 <li>`true` - 拡張子は付与されます。</li>
 </ul>
 
+<hr>
+
 <h3>$upload['extension_tolower']</h3>
 
 <p>`.JPG`などの大文字の拡張子を小文字に統一します。</p>
@@ -204,6 +262,8 @@
 <li>`false` - 小文字に統一されません。</li>
 <li>`true` -  小文字に統一されます。</li>
 </ul>
+
+<hr>
 
 <h3>$upload['image_only']</h3>
 
@@ -214,15 +274,21 @@
 <li>`true` -  画像のみに制限されます。</li>
 </ul>
 
-<p>以下の設定項目は`image_only`が指定された時のみ有効なオプションです。</p>
+<hr>
+
+<p><strong>※以下の設定項目は`image_only`が指定された時のみ有効なオプションです。</strong></p>
 
 <h3>$upload['max_filesize']</h3>
 
 <p>アップロードできるファイルサイズに制限を数値で指定します。</p>
 
+<hr>
+
 <h3>$upload['max_width']</h3>
 
 <p>アップロードできる画像の横幅を数値で指定します。</p>
+
+<hr>
 
 <h3>$upload['max_height']</h3>
 
