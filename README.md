@@ -38,7 +38,7 @@ $ ./terrier init
 
 アーカイブをダウンロードして、任意の場所に展開してください。初期化コマンドを発行するか、以下の処理を行ってください。
 
-- `application/config_sample`を`application/config'にリネーム
+- `application/config_sample`を`application/config`にリネーム
 - `application/tmp`に書き込み権限を発行
 
 ※書き込み権限はファイルアップロード、ロギング処理を行わない場合は不要です。
@@ -71,7 +71,7 @@ Terrierは`application/templates/`以下のファイルをテンプレートと�
 ### Template Tags
 
 テンプレートはJavaScriptのHandlebarsのように`{{``}}`で括った中身に変数をバインドします。
-テンプレート内では入力データやバリデーションエラーの他に環境変数など様々な値が使用できます（ドキュメント整備中）。また、変数は自動でエスケープされます。
+テンプレート内では入力データやバリデーションエラーの他に環境変数など様々な値が使用できます（http://ysugimoto.github.io/Terrier/template.html）。また、変数は自動でエスケープされます。
 
 ## License
 
