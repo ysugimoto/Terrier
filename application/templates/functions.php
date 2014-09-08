@@ -46,3 +46,16 @@ if ( ! function_exists('input_data_all') )
         return implode("\n", $out);
     }
 }
+
+if ( ! function_exists('input_data') )
+{
+    /**
+     * Get input value of key
+     * @param String $field
+     * @return string
+     */
+    function input_data_all($field)
+    {
+        return Validation::getValue($field);
+    }
+}
