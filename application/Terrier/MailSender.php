@@ -77,6 +77,8 @@ class MailSender
             throw new Exception('Mail driver is not selected.');
         }
 
+        // Pre-reset to
+        $this->driver->resetTo();
         $this->driver->to($to);
         $this->driver->subject($this->setting->subject);
 
