@@ -148,16 +148,16 @@ class Template
         $index   = 0;
         $nest    = 0;
 
-        preg_match_all('/\{\{([\/#@%])?(.+?)\}\}/', $this->template, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+        preg_match_all('/\{\{([\/#@%])?(.+?)\}\}/u', $this->template, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
         foreach ( $matches as $match )
         {
             list($all, $signature, $content) = $match;
             $context = substr($this->template, $index, $all[1] - $index);
-            if ( $context && ! preg_match('/\A[\r\n\s]+\z/', $context) )
+            if ( $context && ! preg_match('/\A[\r\n\s]+\z/u', $context) )
             {
                 if ( $nest > 0 )
                 {
-                    $context = preg_replace('/^[\n\r]+|[\n\r]+$/', '', $context);
+                    $context = preg_replace('/^[\n\r]+|[\n\r]+$/u', '', $context);
                 }
                 $compile[] = $this->getPrefix() . $this->quote($context);
             }
@@ -198,7 +198,7 @@ class Template
                     {
                         $compile[] = $v;
                     }
-                    if ( preg_match('/^(for|if)/', $content[0]) )
+                    if ( preg_match('/^(for|if)/u', $content[0]) )
                     {
                         $nest++;
                     }
@@ -220,7 +220,7 @@ class Template
 
         // debug
         //echo '<pre>';
-        //var_dump(implode('', $compile));
+        //file_put_contents(TMP_PATH . 'template.php', implode('', $compile));
         //echo '</pre>';
 
         $this->templateFunction = create_function('$obj,$b=""', implode('', $compile));
@@ -248,7 +248,7 @@ class Template
             $isEscape = false;
         }
 
-        if ( ! preg_match('/\A(data|value|index|parent)(.+)?/', $sentence, $match) )
+        if ( ! preg_match('/\A(data|value|index|parent)(.+)?/u', $sentence, $match) )
         {
             return;
         }
@@ -291,7 +291,7 @@ class Template
      */
     protected function _compileBuiltInControl($sentence)
     {
-        if ( ! preg_match('/^(if|else\sif|else|for|include)(?:\s(.+))?/', $sentence, $match) )
+        if ( ! preg_match('/^(if|else\sif|else|for|include)(?:\s(.+))?/u', $sentence, $match) )
         {
             return $this->getPrefix() . "\\Terrier\\Helper::escape(" . $this->getSyntax($sentence) . ")";
         }
@@ -386,10 +386,9 @@ class Template
      */
     protected function _parseCondition($condition)
     {
-        $token  = preg_replace('/(!|>=?|<=?|={2,3}|[^\+]\+|[^\-]\-|\*|&{2}|\|{2})/', ' $1 ', $condition);
-        $tokens = preg_split('/\s+/', $token);
+        $token  = preg_replace('/(!|>=?|<=?|={2,3}|[^\+]\+|[^\-]\-|\*|&{2}|\|{2})/u', ' $1 ', $condition);
+        $tokens = preg_split('/\s+/u', $token);
         $cond   = array();
-
 
         foreach ( $tokens as $t )
         {
@@ -397,7 +396,7 @@ class Template
             {
                 continue;
             }
-            else if ( preg_match('/\A(!|>=?|<=?|={1,3}|\+|\-|\*|&{2}|\|{2})\z/', $t) )
+            else if ( preg_match('/\A(!|>=?|<=?|={1,3}|\+|\-|\*|&{2}|\|{2})\z/u', $t) )
             {
                 $cond[] = $t;
             }
@@ -445,9 +444,9 @@ class Template
      */
     protected function _compileHelper($sentence)
     {
-        $args = preg_split('/\s+/', $sentence);
+        $args = preg_split('/\s+/u', $sentence);
         for ( $i = 0; $i < count($args); ++$i ) {
-            if ( preg_match('/\\\\$/', $args[$i]) ) {
+            if ( preg_match('/\\\\$/u', $args[$i]) ) {
                 $args[$i] = rtrim($args[$i], '\\');
                 if ( isset($args[$i + 1]) )
                 {
@@ -506,7 +505,7 @@ class Template
         if ( $prop )
         {
             $prop = str_replace('.', '->', $prop);
-            $prop = preg_replace('/@([0-9a-zA-Z\-_]+)/', "['$1']", $prop);
+            $prop = preg_replace('/@([0-9a-zA-Z\-_]+)/u', "['$1']", $prop);
             $syntax .= '->' . $prop;
         }
 
@@ -527,11 +526,11 @@ class Template
      */
     protected function getPrimitiveType($value)
     {
-        if ( preg_match('/\A[\'"](.*?)[\'"]\z/', $value, $match) )
+        if ( preg_match('/\A[\'"](.*?)[\'"]\z/u', $value, $match) )
         {
             return $match[1];
         }
-        else if ( preg_match('/\A([0-9\.]+?)\z/', $value, $match) )
+        else if ( preg_match('/\A([0-9\.]+?)\z/u', $value, $match) )
         {
             return ( strpos($match[1], '.') !== FALSE ) ? floatval($match[1]) : intval($match[1]);
         }
