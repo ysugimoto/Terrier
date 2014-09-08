@@ -54,7 +54,7 @@ if ( ! function_exists('input_data') )
      * @param String $field
      * @return string
      */
-    function input_data_all($field)
+    function input_data($field)
     {
         return Validation::getValue($field);
     }
