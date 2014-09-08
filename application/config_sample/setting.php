@@ -27,7 +27,7 @@ $setting['name'] = array(
 );
 
 $setting['email'] = array(
-    'label'  => 'お名前',
+    'label'  => 'メールアドレス',
     'rules'  => array(
         'required',
         'valid_email'
