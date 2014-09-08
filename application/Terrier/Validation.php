@@ -221,6 +221,10 @@ class Validation
                         if ( is_bool($result) && $result === false )
                         {
                             $arguments[0] = $setting['label'];
+                            if( $validation === 'matches' )
+                            {
+                                $arguments[1] = $this->setting[$arguments[1]]['label'];
+                            }
                             static::$errors[$field] = vsprintf($this->messages[$validation], $arguments);
                             $isValid = FALSE;
                             break;
@@ -244,7 +248,7 @@ class Validation
                     if ( is_bool($result) && $result === false )
                     {
                         $arguments[0] = $setting['label'];
-                        if( isset($arguments[1]) )
+                        if( $validation === 'matches' )
                         {
                             $arguments[1] = $this->setting[$arguments[1]]['label'];
                         }
