@@ -793,7 +793,7 @@ class Validation
      */
     public function conv_num($str)
     {
-        return str_repalce(
+        return str_replace(
             array('０', '１', '２', '３', '４', '５', '６', '７', '８', '９'),
             array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'),
             $str
