@@ -319,7 +319,7 @@ class Router
         {
             try
             {
-                $subject = ( isset($setting['subject_for_admin'] ) ? $setting['subject_for_admin'] : $setting['subject'];
+                $subject = ( isset($setting['subject_for_admin']) ) ? $setting['subject_for_admin'] : $setting['subject'];
                 $mailer->send($setting['admin_email'], $subject, Config::get('admin_mailbody'));
             }
             catch ( \Terrier\Exception $e )
