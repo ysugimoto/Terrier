@@ -44,6 +44,11 @@ $mail['from_name'] = 'Test Site';
  */
 $mail['subject'] = '[Contact]';
 
+/**
+ * Send mail subject ( for admin )
+ * @value string
+ */
+$mail['subject_for_admin'] = '[Contact(Admin)]';
 
 /* ================= SMTP Congiuration ================ */
 

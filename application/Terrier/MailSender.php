@@ -68,9 +68,10 @@ class MailSender
      * @method send
      * @public
      * @param string $to
+     * @param string $subject
      * @param string $mailBody
      */
-    public function send($to, $mailBody = 'mailbody.txt')
+    public function send($to, $subject, $mailBody = 'mailbody.txt')
     {
         if ( ! $this->driver )
         {
@@ -80,7 +81,7 @@ class MailSender
         // Pre-reset to
         $this->driver->resetTo();
         $this->driver->to($to);
-        $this->driver->subject($this->setting->subject);
+        $this->driver->subject($subject);
 
         if ( ! file_exists(TEMPLATE_PATH . $mailBody) )
         {
