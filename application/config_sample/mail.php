@@ -59,8 +59,8 @@ $mail['subject_for_admin'] = '[Contact(Admin)]';
  * Gmail must connect with SSL/TLS.
  * Therefore, We recommend these settings:
  *
- * $mail['hostname'] = 'smtp.gmail.com';
- * $mail['port']     = 587;
+ * $mail['hostname'] = 'ssl://smtp.gmail.com';
+ * $mail['port']     = 465;
  * $mail['secure']   = true;
  * $mail['username'] = 'your gmail mailaddress';
  * $mail['password'] = 'generated app password';

@@ -198,9 +198,9 @@ class SmtpMail extends Driver
         // Does SMTP server need secure connection?
         if ( $this->_secure === true )
         {
-            $this->cmd('starttls');
-            stream_socket_enable_crypto($this->handle, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            @stream_socket_enable_crypto($this->handle, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
             $this->cmd('ehlo ' . Request::server('SERVER_NAME'));
+            $this->cmd('starttls');
         }
 
         // Does Server need Authenticate?
