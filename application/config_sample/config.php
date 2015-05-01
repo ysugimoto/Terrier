@@ -17,6 +17,11 @@
  */
 $config['logging_level'] = 1;
 
+/**
+ * Timezone setting
+ * @value string
+ */
+$config['timezone'] = 'Asia/Tokyo';;
 
 /**
  * Template path
