@@ -165,7 +165,7 @@ class Upload
             return $this->_setError($field . ' field not exists.');
         }
 
-        $result = new stdClass;
+        $result = new \stdClass;
 
         // Uploaded file is really uploaded by form?
         if ( ! is_uploaded_file($file['tmp_name']) )
@@ -237,12 +237,12 @@ class Upload
      */
     protected function _validateFile($FILE)
     {
-        $info     = new stdClass;
+        $info     = new \stdClass;
         $filepath = $FILE['tmp_name'];
         $filename = $this->_prepFilename($FILE['name']);
 
         // check limit filesize
-        if ( $this->_settings->max_filesize)
+        if ( $this->_settings->max_filesize
              && filesize($filepath) > (int)$this->_settings->max_filesize )
         {
             return $this->_setError('Uploaded file over max filesize.');
