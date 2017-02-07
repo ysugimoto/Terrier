@@ -282,7 +282,7 @@ abstract class Driver
             }
 
             // create stack data
-            $data = new stdClass;
+            $data = new \stdClass;
 
             $data->filePath   = $file;
             $data->encoding   = $encoding;
