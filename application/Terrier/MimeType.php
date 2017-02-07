@@ -107,36 +107,6 @@ class Mimetype
             $mime = $this->{$this->backend}($filePath, $ext);
         }
 
-        if ( ! $mime )
-        {
-            $mime = $this->_detectFromMimeList($filePath, $ext);
-        }
-
-        return $mime;
-    }
-
-
-    // ---------------------------------------------------------------
-
-
-    /**
-     * Detection from mimetype file list
-     *
-     * @method _detectFromMimeList
-     * @protected
-     * @param  string $path
-     * @param  string $ext
-     * @return mixed
-     */
-    protected function _detectFromMimeList($path, $ext)
-    {
-        $mime      = null;
-        $mimes     = Config::load('mimetype');
-        $extension = ( ! empty($ext) ) ? $ext : $this->getFileExtension($path);
-        if ( isset($mimes[$extension]) )
-        {
-            $mime = ( is_array($mimes[$extension]) ) ? $mimes[$extension][0] : $mimes[$extension];
-        }
         return $mime;
     }
 
