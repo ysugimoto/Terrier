@@ -370,6 +370,11 @@ class Validation
      */
     public function valid_email($str)
     {
+        if ( $str === '' )
+        {
+            return TRUE;
+        }
+
         if ( Config::get('disable_email_filter') === true )
         {
             // check mail address when filter email for japanese.

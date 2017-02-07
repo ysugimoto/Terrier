@@ -299,7 +299,7 @@ class Upload
                 $info->width    = 0;
                 $info->height   = 0;
 
-                $info->mimetype = MimeType::detect($filepath, $extension);
+                $info->mimetype = MimeType::getInstance()->detect($filepath, $extension);
             }
             else
             {
